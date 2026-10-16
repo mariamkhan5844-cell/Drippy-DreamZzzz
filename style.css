@@ -4,7 +4,7 @@ font-family: 'Helvetica Neue', Arial, sans-serif;
 line-height: 1.7;
 margin: 0;
 padding: 0;
-color: #432219; /* MATCH: Rich Chocolate Brown from logo text */
+color: #fffdf9; /* MATCH: Rich Chocolate Brown from logo text */
 
 /* FIX: Adds a beautiful repeating dessert pattern background matching your brand */
 background-image: url('bg.jpeg');
@@ -68,10 +68,10 @@ transition: all 0.25s ease;
 
 /* Interactive feedback animation when buttons are tapped or clicked */
 nav a:hover, nav a:active {
-color: #432219 !important; /* Text turns dark chocolate brown on hover */
+color: #e58da3 !important; /* Text turns dark chocolate brown on hover */
 background: #e58da3; /* Button background pops to bright Strawberry Pink */
 border-color: #fffdf9;
-transform: scale(1.02);
+transform: translateY(-2px);
 }
 
 

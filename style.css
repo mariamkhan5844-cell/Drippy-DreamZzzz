@@ -1,0 +1,192 @@
+/* Drippy DreamZzz - Complete Branded Pattern Layout Redesign */
+body {
+font-family: 'Helvetica Neue', Arial, sans-serif;
+line-height: 1.7;
+margin: 0;
+padding: 0;
+color: #432219; /* MATCH: Rich Chocolate Brown from logo text */
+
+/* FIX: Adds a beautiful repeating dessert pattern background matching your brand */
+background-image: url('bg.jpeg');
+background-repeat: repeat; /* Tells the browser to tile the little sweets infinitely */
+background-size: 240px; /* Clamps the element illustrations to a small, subtle wallpaper size */
+background-attachment: fixed; /* Keeps the background static while your text articles scroll smoothly */
+}
+
+/* Fluid box wrapper that clamps banner height to standard proportions */
+.banner-wrapper {
+width: 100%;
+max-height: 280px;
+overflow: hidden;
+display: block;
+background-color: #f5cf9e; /* Warm peach-yellow transition base */
+}
+
+.site-banner-img {
+width: 100%;
+height: 100%;
+object-fit: contain;
+display: block;
+margin: 0 auto;
+transition: transform 0.4s ease;
+}
+
+.site-banner-img:hover {
+transform: scale(1.03); /* Interactive lift animation */
+}
+
+/* Semi-Transparent Navigation Bar */
+nav {
+background: rgba(67, 34, 25, 0.9); /* 90% Solid Chocolate Brown for high text contrast */
+padding: 16px;
+text-align: center;
+box-shadow: 0 4px 10px rgba(67, 34, 25, 0.15);
+}
+
+nav a {
+color: #fffdf9; /* Vanilla White */
+margin: 0 20px;
+text-decoration: none;
+font-weight: bold;
+text-transform: uppercase;
+font-size: 0.95rem;
+letter-spacing: 1px;
+display: inline-block;
+transition: all 0.3s ease;
+}
+
+nav a:hover {
+color: #e58da3; /* MATCH: Strawberry Pink highlight on hover */
+transform: translateY(-2px);
+}
+
+/* Grid Layout Container */
+.main-container {
+max-width: 1100px;
+margin: 40px auto;
+padding: 0 20px;
+display: flex;
+gap: 30px;
+}
+.content-area { flex: 2; }
+.sidebar-area { flex: 1; }
+
+/* Styling for Animated Baking Video Section */
+.video-showcase {
+background: #fffdf9; /* Vanilla Cream */
+padding: 25px;
+margin-bottom: 30px;
+border-radius: 20px;
+border: 2px solid #e58da3; /* Strawberry Pink border */
+box-shadow: 0 8px 24px rgba(67, 34, 25, 0.1);
+}
+.video-showcase h2 {
+margin-top: 0;
+color: #432219;
+font-size: 1.6rem;
+}
+.video-container {
+width: 100%;
+border-radius: 12px;
+overflow: hidden;
+line-height: 0;
+box-shadow: 0 4px 12px rgba(67, 34, 25, 0.12);
+}
+.baking-video {
+width: 100%;
+height: auto;
+display: block;
+}
+
+/* Recipe Preview Cards - Vanilla Cream for high content contrast over the background */
+.recipe-card {
+background: #fffdf9;
+padding: 30px;
+margin-bottom: 30px;
+border-radius: 20px;
+box-shadow: 0 8px 24px rgba(67, 34, 25, 0.15);
+border: 2px solid #e58da3; /* MATCH: Sturdy Strawberry Pink card border */
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recipe-card:hover {
+transform: translateY(-4px);
+box-shadow: 0 16px 32px rgba(67, 34, 25, 0.22);
+}
+
+.recipe-card h3 {
+margin-top: 0;
+color: #432219;
+font-size: 1.8rem;
+font-weight: 700;
+}
+
+.meta-text {
+font-size: 0.85rem;
+color: #e58da3; /* MATCH: Strawberry Pink for post details */
+margin-bottom: 15px;
+font-weight: 600;
+}
+
+.read-more {
+display: inline-block;
+margin-top: 10px;
+color: #432219;
+font-weight: bold;
+text-decoration: none;
+border-bottom: 3px solid #e58da3; /* MATCH: Pink underline links */
+padding-bottom: 2px;
+transition: all 0.2s ease;
+}
+
+.read-more:hover {
+color: #e58da3;
+border-color: #432219;
+}
+
+/* Sidebar Layout Boxes */
+.sidebar-box {
+background: #fffdf9; /* Vanilla Cream */
+padding: 25px;
+margin-bottom: 30px;
+border-radius: 20px;
+border-top: 6px solid #e58da3; /* MATCH: Thick Pink top stripe header */
+border-bottom: 2px solid #e58da3;
+box-shadow: 0 8px 24px rgba(67, 34, 25, 0.15);
+}
+.sidebar-box h3 { margin-top: 0; color: #432219; }
+
+/* Footer Area using the Deep Chocolate Base */
+footer {
+background: #432219;
+color: #fffdf9;
+text-align: center;
+padding: 30px;
+margin-top: 60px;
+font-size: 0.95rem;
+box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+}
+footer a {
+color: #e58da3;
+text-decoration: none;
+font-weight: bold;
+}
+footer a:hover {
+text-decoration: underline;
+}
+
+/* Recipe Image Scaling Block */
+.recipe-img {
+width: 100%;
+max-height: 400px;
+object-fit: cover;
+border-radius: 14px;
+margin-bottom: 20px;
+box-shadow: 0 4px 12px rgba(67, 34, 25, 0.12);
+}
+
+/* Smooth layout crunch for mobile phone viewports */
+@media (max-width: 768px) {
+.main-container { flex-direction: column; }
+.banner-wrapper { max-height: 160px; }
+}

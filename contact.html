@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us - Drippy DreamZzz</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* Form Specific Styles */
+.contact-form { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-weight: bold; color: #432219; }
+.form-group input, .form-group textarea {
+padding: 12px;
+border: 1px solid #f6f0e8;
+border-radius: 8px;
+font-size: 1rem;
+background-color: #fffdf9;
+color: #432219;
+}
+.form-group input:focus, .form-group textarea:focus { border-color: #e58da3; outline: none; }
+.submit-btn {
+background: #432219;
+color: white;
+border: none;
+padding: 14px;
+border-radius: 8px;
+font-weight: bold;
+cursor: pointer;
+font-size: 1rem;
+text-transform: uppercase;
+letter-spacing: 1px;
+transition: background 0.2s ease;
+}
+.submit-btn:hover { background: #e58da3; color: #432219; }
+</style>
+</head>
+<body>
+
+<header>
+<div class="header-container">
+<h1>Get In Touch</h1>
+<p>Have a recipe question or a business inquiry? We'd love to hear from you.</p>
+</div>
+</header>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="about.html">About Us</a>
+<a href="privacy.html">Privacy Policy</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+<div class="main-container">
+<main class="content-area">
+<div class="recipe-card">
+<h2>Drop Us a Line</h2>
+<p>If you ran into an issue with a recipe bake, have feedback on our tutorials, or simply want to share a picture of your gorgeous glazed creations, use the contact form below! We do our best to reply to all reader messages within 48 hours.</p>
+
+<form class="contact-form" action="#" method="POST">
+<div class="form-group">
+<label for="name">Your Name</label>
+<input type="text" id="name" name="name" required placeholder="Enter your full name">
+</div>
+<div class="form-group">
+<label for="email">Email Address</label>
+<input type="email" id="email" name="email" required placeholder="name@example.com">
+</div>
+<div class="form-group">
+<label for="message">Your Message</label>
+<textarea id="message" name="message" rows="6" required placeholder="How can we help you?"></textarea>
+</div>
+<button type="submit" class="submit-btn">Send Message</button>
+</form>
+</div>
+</main>
+
+<aside class="sidebar-area">
+<div class="sidebar-box">
+<h3>Direct Email</h3>
+<p>For official brand partnerships, media kits, or sponsorship inquiries, you can also reach our inbox directly at:</p>
+<p><strong>hello@yourdomain.com</strong></p>
+</div>
+</aside>
+</div>
+
+<footer>
+<p>&copy; 2026 Drippy DreamZzz. All Rights Reserved. | <a href="privacy.html">Privacy Policy</a></p>
+</footer>
+
+</body>
+</html>

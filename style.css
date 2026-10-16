@@ -35,30 +35,24 @@ transition: transform 0.4s ease;
 transform: scale(1.03); /* Interactive lift animation */
 }
 
-/* Semi-Transparent Navigation Bar */
+/* Upgraded Navigation Menu Bar - Optimized for Mobile Displays */
 nav {
-background: rgba(67, 34, 25, 0.9); /* 90% Solid Chocolate Brown for high text contrast */
-padding: 16px;
+background: rgba(67, 34, 25, 0.95); /* Deep Chocolate Brown glaze layer */
+padding: 15px 10px;
 text-align: center;
-box-shadow: 0 4px 10px rgba(67, 34, 25, 0.15);
+box-shadow: 0 4px 15px rgba(67, 34, 25, 0.25);
+backdrop-filter: blur(8px);
+
+/* Creates a clean, balanced grid system for mobile viewports */
+display: grid;
+grid-template-columns: 1fr 1fr; /* splits buttons neatly into 2 columns */
+gap: 12px; /* Adds equal breathing room spacing between all blocks */
+max-width: 90%;
+margin: 15px auto; /* Centers the whole bar with a floating bubble look */
+border-radius: 14px; /* Softly curves the menu corners */
+border: 1px solid rgba(229, 141, 163, 0.3); /* Adds a faint strawberry pink outline glow */
 }
 
-nav a {
-color: #fffdf9; /* Vanilla White */
-margin: 0 20px;
-text-decoration: none;
-font-weight: bold;
-text-transform: uppercase;
-font-size: 0.95rem;
-letter-spacing: 1px;
-display: inline-block;
-transition: all 0.3s ease;
-}
-
-nav a:hover {
-color: #e58da3; /* MATCH: Strawberry Pink highlight on hover */
-transform: translateY(-2px);
-}
 
 /* Grid Layout Container */
 .main-container {

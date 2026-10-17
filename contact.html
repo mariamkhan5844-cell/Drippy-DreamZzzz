@@ -6,44 +6,82 @@
 <title>Contact Us - Drippy DreamZzz</title>
 <link rel="stylesheet" href="style.css">
 <style>
-/* Form Specific Styles */
-.contact-form { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
-.form-group { display: flex; flex-direction: column; gap: 5px; }
-.form-group label { font-weight: bold; color: #432219; }
+/* Force high contrast text colors directly inside the HTML markup */
+nav a, nav a:visited {
+color: #ffffff !important;
+text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+font-weight: bold !important;
+}
+nav a:hover, nav a:active {
+color: #e58da3 !important;
+background-color: rgba(255, 255, 255, 0.15) !important;
+}
+p, label {
+color: #432219 !important;
+font-size: 0.95rem;
+}
+h2 { color: #432219; }
+
+/* Premium Interactive Email Form Box Styling */
+.contact-form {
+display: flex;
+flex-direction: column;
+gap: 15px;
+margin-top: 20px;
+}
+.form-group {
+display: flex;
+flex-direction: column;
+gap: 5px;
+}
+.form-group label {
+font-weight: bold;
+text-align: left;
+}
 .form-group input, .form-group textarea {
 padding: 12px;
-border: 1px solid #f6f0e8;
-border-radius: 8px;
+border: 2px solid #e58da3;
+border-radius: 10px;
 font-size: 1rem;
 background-color: #fffdf9;
 color: #432219;
+font-family: inherit;
+transition: border-color 0.2s ease;
 }
-.form-group input:focus, .form-group textarea:focus { border-color: #e58da3; outline: none; }
+.form-group input:focus, .form-group textarea:focus {
+border-color: #432219;
+outline: none;
+}
 .submit-btn {
 background: #432219;
-color: white;
+color: #fffdf9;
 border: none;
 padding: 14px;
-border-radius: 8px;
+border-radius: 30px;
 font-weight: bold;
 cursor: pointer;
 font-size: 1rem;
 text-transform: uppercase;
 letter-spacing: 1px;
-transition: background 0.2s ease;
+box-shadow: 0 4px 10px rgba(67, 34, 25, 0.2);
+margin-top: 10px;
+transition: all 0.2s ease;
 }
-.submit-btn:hover { background: #e58da3; color: #432219; }
+.submit-btn:hover {
+background: #e58da3;
+color: #432219;
+transform: scale(1.02);
+}
 </style>
 </head>
 <body>
 
-<header>
-<div class="header-container">
-<h1>Get In Touch</h1>
-<p>Have a recipe question or a business inquiry? We'd love to hear from you.</p>
+<!-- Professional Branded Banner at the top -->
+<div class="banner-wrapper">
+<img src="banner.png" alt="Drippy DreamZzz Banner Layout" class="site-banner-img">
 </div>
-</header>
 
+<!-- Clean Relative Navigation Menu Loop -->
 <nav>
 <a href="index.html">Home</a>
 <a href="about.html">About Us</a>
@@ -51,13 +89,15 @@ transition: background 0.2s ease;
 <a href="contact.html">Contact</a>
 </nav>
 
+<!-- Main Content Layout Window -->
 <div class="main-container">
-<main class="content-area">
-<div class="recipe-card">
-<h2>Drop Us a Line</h2>
-<p>If you ran into an issue with a recipe bake, have feedback on our tutorials, or simply want to share a picture of your gorgeous glazed creations, use the contact form below! We do our best to reply to all reader messages within 48 hours.</p>
+<main class="content-area" style="flex: 1;">
+<div class="recipe-card" style="padding: 40px;">
+<h1 style="color: #432219; margin-top: 0; font-size: 2.2rem; border-bottom: 3px solid #e58da3; padding-bottom: 10px;">Get In Touch</h1>
+<p>Have a recipe question, ran into a quick baking issue with a glaze drip, or want to share pictures of your gorgeous dessert creations? Use the text boxes below! We love hearing from our community and do our absolute best to reply within 48 hours.</p>
 
-<form class="contact-form" action="#" method="POST">
+<!-- THE LIVE INTERACTIVE MESSAGE BOX SYSTEM -->
+<form class="contact-form" action="https://formspree.io" method="POST">
 <div class="form-group">
 <label for="name">Your Name</label>
 <input type="text" id="name" name="name" required placeholder="Enter your full name">
@@ -68,24 +108,18 @@ transition: background 0.2s ease;
 </div>
 <div class="form-group">
 <label for="message">Your Message</label>
-<textarea id="message" name="message" rows="6" required placeholder="How can we help you?"></textarea>
+<textarea id="message" name="message" rows="5" required placeholder="How can we help your baking journey today?"></textarea>
 </div>
 <button type="submit" class="submit-btn">Send Message</button>
 </form>
+
 </div>
 </main>
-
-<aside class="sidebar-area">
-<div class="sidebar-box">
-<h3>Direct Email</h3>
-<p>For official brand partnerships, media kits, or sponsorship inquiries, you can also reach our inbox directly at:</p>
-<p><strong>hello@yourdomain.com</strong></p>
-</div>
-</aside>
 </div>
 
+<!-- Footer System Area -->
 <footer>
-<p>&copy; 2026 Drippy DreamZzz. All Rights Reserved. | <a href="privacy.html">Privacy Policy</a></p>
+<p style="color: #fffdf9 !important;">&copy; 2026 Drippy Dreams. All Rights Reserved. | <a href="privacy.html" style="color: #e58da3;">Privacy Policy</a></p>
 </footer>
 
 </body>

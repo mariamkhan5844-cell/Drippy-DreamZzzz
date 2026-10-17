@@ -3,40 +3,109 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Drippy Dreams - Premium Cake Pops & Baking Recipes</title>
+<title>Welcome to Recipes - Drippy DreamZzz</title>
 <link rel="stylesheet" href="style.css">
-
 <style>
-/* Force high contrast text colors directly inside the HTML markup */
-nav a, nav a:visited {
-color: #ffffff !important;
-text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
-font-weight: bold !important;
+nav a, nav a:visited { color: #ffffff !important; font-weight: bold !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+nav a:hover { color: #e58da3 !important; background-color: rgba(255,255,255,0.15) !important; }
+p { color: #432219 !important; }
+
+/* Custom Branded Welcome Box Header */
+.welcome-title-box {
+background: #fffdf9; /* Vanilla Cream */
+border: 2px solid #e58da3; /* Strawberry Pink border */
+border-radius: 20px;
+padding: 30px 20px;
+text-align: center;
+margin-bottom: 30px;
+box-shadow: 0 8px 24px rgba(67, 34, 25, 0.1);
 }
-nav a:hover, nav a:active {
-color: #e58da3 !important;
-background-color: rgba(255, 255, 255, 0.15) !important;
+.welcome-title-box h1 {
+color: #432219; /* Rich Chocolate Brown */
+font-size: 2.6rem;
+margin: 0 0 10px 0;
+font-weight: bold;
 }
-/* Force summary text visibility */
-p, .recipe-card p {
-color: #432219 !important;
-display: block !important;
-visibility: visible !important;
-font-size: 0.95rem !important;
-opacity: 1 !important;
+
+.recipes-grid-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 25px;
 margin-top: 10px;
-margin-bottom: 15px;
 }
+.clickable-recipe-card {
+cursor: pointer;
+background: #fffdf9;
+border-radius: 16px;
+border: 2px solid #e58da3;
+overflow: hidden;
+box-shadow: 0 6px 18px rgba(67, 34, 25, 0.08);
+transition: all 0.3s ease;
+text-align: center;
+padding-bottom: 15px;
+}
+.clickable-recipe-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 12px 24px rgba(67, 34, 25, 0.16);
+border-color: #432219;
+}
+.clickable-recipe-card h3 {
+color: #432219;
+margin: 15px 10px 5px 10px;
+font-size: 1.3rem;
+}
+
+/* POP-UP MODAL BOX SYSTEM LAYERS */
+.modal-overlay {
+position: fixed;
+top: 0; left: 0; width: 100%; height: 100%;
+background: rgba(67, 34, 25, 0.7);
+display: flex; justify-content: center; align-items: center;
+opacity: 0; pointer-events: none;
+z-index: 9999;
+transition: opacity 0.3s ease;
+}
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+.modal-content-box {
+background: #fffdf9;
+padding: 35px;
+border-radius: 20px;
+max-width: 500px;
+width: 90%;
+border: 4px solid #e58da3;
+box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+text-align: left;
+position: relative;
+transform: scale(0.8);
+transition: transform 0.3s ease;
+}
+.modal-overlay.active .modal-content-box { transform: scale(1); }
+
+.close-modal-btn {
+position: absolute;
+top: 15px; right: 20px;
+font-size: 1.8rem; font-weight: bold; color: #432219;
+cursor: pointer;
+transition: color 0.2s ease;
+}
+.close-modal-btn:hover { color: #e58da3; }
+
+.ingredients-list-style {
+margin: 15px 0; padding-left: 20px;
+color: #432219; line-height: 1.8;
+}
+
+@media (max-width: 768px) { .recipes-grid-container { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
-<!-- Full-width live banner container matching the exact website size -->
 <div class="banner-wrapper">
 <img src="banner.png" alt="Drippy DreamZzz Banner Layout" class="site-banner-img">
 </div>
 
-<!-- Navigation Menu (Required by Google) -->
+<!-- CLEAN MENU BAR (Recipes Tab Removed to prevent duplication) -->
 <nav>
 <a href="index.html">Home</a>
 <a href="about.html">About Us</a>
@@ -44,59 +113,77 @@ margin-bottom: 15px;
 <a href="contact.html">Contact</a>
 </nav>
 
-<!-- Main Content Layout -->
 <div class="main-container">
+<main class="content-area" style="flex: 1;">
 
-<!-- Left Side: Recipes -->
-<main class="content-area">
-
-<!-- HIGHLIGHTED WELCOME BLOCK (Replaces the old video section completely) -->
-<section class="recipe-card" style="text-align: center; padding: 40px 20px;">
-<h2 style="font-size: 2.2rem; margin-bottom: 10px; color: #432219;">Welcome to the Drippy DreamZzz Kitchen!</h2>
-<p style="font-size: 1.1rem; line-height: 1.6; max-width: 600px; margin: 0 auto 20px auto; color: #432219 !important;">
-Unlocking the ultimate secrets to jaw-dropping cakes, gooey artisan desserts, and beautifully glazed treats. Explore our foolproof recipes below and master the art of scratch baking!
+<!-- STYLED STANDALONE TEXT BOX -->
+<div class="welcome-title-box">
+<h1>Welcome to Recipes</h1>
+<p style="font-size: 1.05rem; margin: 0;">
+Tap or click directly onto any dessert below to instantly reveal the secret kitchen ingredients checklist!
 </p>
-<a href="recipes.html" style="display: inline-block; background-color: #e58da3; color: #fffdf9; font-weight: bold; text-decoration: none; padding: 12px 30px; border-radius: 30px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(229, 141, 163, 0.4); transition: transform 0.2s ease;">
-Browse Recipes
-</a>
-</section>
+</div>
 
-<!-- Recipes Heading for the jump link to target -->
-<h2 id="recipes-heading" style="color: #fffdf9; text-shadow: 2px 2px 4px rgba(67, 34, 25, 0.8); margin-top: 40px; font-size: 2rem;">Fresh Out The Oven</h2>
+<div class="recipes-grid-container">
+<div class="clickable-recipe-card" onclick="openRecipeModal('cakepops-modal')">
+<img src="cake.jpg" alt="Handmade Cake Pops" class="recipe-img" style="border-radius: 14px 14px 0 0; margin-bottom: 0;">
+<h3>Crack-Free Cake Pops</h3>
+<p style="font-size: 0.85rem; color: #e58da3 !important; font-weight: bold; margin: 5px 0 0 0;">Click to Reveal Ingredients</p>
+</div>
 
-<!-- ARTICLE 1: CAKE POPS ARTICLE -->
-<article class="recipe-card">
-<img src="cake.jpg" alt="Handmade Cake Pops" class="recipe-img">
-<h3>Secret to Perfect, Crack-Free Homemade Cake Pops</h3>
-<p class="meta-text">Published: October 15, 2026 | Author: Drippy Dreams Kitchen</p>
-<p>Ever wonder how professional bakeries make smooth, perfectly spherical cake pops without those annoying cracks forming in the candy coating? The answer comes down to controlling the temperature shift between your chilled cake balls and the melted chocolate coating. In this guide, we reveal the absolute best binders to use and how to get that signature dip every time...</p>
-<a href="#" class="read-more">Get Recipe Breakdown</a>
-</article>
-
-<!-- ARTICLE 2: BROWNIES WITH IMAGE -->
-<article class="recipe-card">
-<img src="brownie.jpg" alt="Fudgy Homemade Brownies" class="recipe-img">
-<h3>5 Secrets to Fudgier Homemade Brownies</h3>
-<p class="meta-text">Published: October 12, 2026 | Author: Drippy Dreams Kitchen</p>
-<p>Are your brownies coming out cakey instead of dense and gooey? The secret isn't just about adding more sugar—it comes down to the temperature of your melted butter and how you whip your eggs. Today, we test five popular techniques to find the ultimate method for chocolate lovers...</p>
-<a href="#" class="read-more">Get Recipe Breakdown</a>
-</article>
+<div class="clickable-recipe-card" onclick="openRecipeModal('brownies-modal')">
+<img src="brownie.jpg" alt="Fudgy Homemade Brownies" class="recipe-img" style="border-radius: 14px 14px 0 0; margin-bottom: 0;">
+<h3>Fudgier Chocolate Brownies</h3>
+<p style="font-size: 0.85rem; color: #e58da3 !important; font-weight: bold; margin: 5px 0 0 0;">Click to Reveal Ingredients</p>
+</div>
+</div>
 </main>
-
-<!-- Right Side: Sidebar -->
-<aside class="sidebar-area">
-<div class="sidebar-box">
-<h3>Baked with Love</h3>
-<p>Welcome to Drippy Dreams! We blend aesthetic modern baking styles with simple, foolproof recipes that actually work in home kitchens.</p>
-</div>
-</aside>
-
 </div>
 
-<!-- Footer Area -->
+<div id="cakepops-modal" class="modal-overlay" onclick="closeRecipeModal('cakepops-modal')">
+<div class="modal-content-box" onclick="event.stopPropagation()">
+<span class="close-modal-btn" onclick="closeRecipeModal('cakepops-modal')">&times;</span>
+<h2 style="color: #432219; margin-top: 0; border-bottom: 2px solid #e58da3; padding-bottom: 8px;">Cake Pops Ingredients</h2>
+<ul class="ingredients-list-style">
+<li>1 box Vanilla or Chocolate Cake Mix (plus required oil/eggs)</li>
+<li>1/2 cup Rich Vanilla Buttercream Frosting (binder)</li>
+<li>14 oz High-Quality Pink Candy Melts / Chocolate Wafers</li>
+<li>24 Durable Lollipop Sticks / Treat Skewers</li>
+<li>2 tablespoons Paramount Crystals or Coconut Oil (for thinning)</li>
+<li>Premium Rainbow Sprinkles mixture</li>
+</ul>
+</div>
+</div>
+
+<div id="brownies-modal" class="modal-overlay" onclick="closeRecipeModal('brownies-modal')">
+<div class="modal-content-box" onclick="event.stopPropagation()">
+<span class="close-modal-btn" onclick="closeRecipeModal('brownies-modal')">&times;</span>
+<h2 style="color: #432219; margin-top: 0; border-bottom: 2px solid #e58da3; padding-bottom: 8px;">Fudgy Brownies Ingredients</h2>
+<ul class="ingredients-list-style">
+<li>1 cup Unsalted Butter (melted and slightly browned)</li>
+<li>2 cups Granulated Cane Sugar</li>
+<li>4 Large Farm Eggs (at room temperature)</li>
+<li>1 cup Dutch-Process Cocoa Powder</li>
+<li>1 cup All-Purpose Baking Flour</li>
+<li>1 cup Semi-Sweet Chocolate Chunks</li>
+<li>1 teaspoon Pure Madagascar Vanilla Extract</li>
+<li>1/2 teaspoon Flaky Sea Salt flakes</li>
+</ul>
+</div>
+</div>
+
 <footer>
-<p>&copy; 2026 Drippy Dreams. All Rights Reserved. | <a href="privacy.html">Privacy Policy</a></p>
+<p style="color: #fffdf9 !important;">&copy; 2026 Drippy Dreams. All Rights Reserved. | <a href="privacy.html" style="color: #e58da3;">Privacy Policy</a></p>
 </footer>
+
+<script>
+function openRecipeModal(modalId) {
+document.getElementById(modalId).classList.add('active');
+}
+function closeRecipeModal(modalId) {
+document.getElementById(modalId).classList.remove('active');
+}
+</script>
 
 </body>
 </html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome to Recipes - Drippy DreamZzz</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* Navigation Style Support Overrides */
+nav a, nav a:visited { color: #ffffff !important; font-weight: bold !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+nav a:hover { color: #e58da3 !important; background-color: rgba(255,255,255,0.15) !important; }
+p { color: #432219 !important; }
+
+/* Interactive Grid Layout Rules for Recipe Grid Elements */
+.recipes-grid-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 25px;
+margin-top: 30px;
+}
+.clickable-recipe-card {
+cursor: pointer;
+background: #fffdf9;
+border-radius: 16px;
+border: 2px solid #e58da3;
+overflow: hidden;
+box-shadow: 0 6px 18px rgba(67, 34, 25, 0.08);
+transition: all 0.3s ease;
+text-align: center;
+padding-bottom: 15px;
+}
+.clickable-recipe-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 12px 24px rgba(67, 34, 25, 0.16);
+border-color: #432219;
+}
+.clickable-recipe-card h3 {
+color: #432219;
+margin: 15px 10px 5px 10px;
+font-size: 1.3rem;
+}
+
+/* POP-UP MODAL BOX SYSTEM LAYERS */
+.modal-overlay {
+position: fixed;
+top: 0; left: 0; width: 100%; height: 100%;
+background: rgba(67, 34, 25, 0.7);
+display: flex; justify-content: center; align-items: center;
+opacity: 0; pointer-events: none;
+z-index: 9999;
+transition: opacity 0.3s ease;
+}
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+.modal-content-box {
+background: #fffdf9;
+padding: 35px;
+border-radius: 20px;
+max-width: 500px;
+width: 90%;
+border: 4px solid #e58da3;
+box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+text-align: left;
+position: relative;
+transform: scale(0.8);
+transition: transform 0.3s ease;
+}
+.modal-overlay.active .modal-content-box { transform: scale(1); }
+
+.close-modal-btn {
+position: absolute;
+top: 15px; right: 20px;
+font-size: 1.8rem; font-weight: bold; color: #432219;
+cursor: pointer;
+transition: color 0.2s ease;
+}
+.close-modal-btn:hover { color: #e58da3; }
+
+.ingredients-list-style {
+margin: 15px 0; padding-left: 20px;
+color: #432219; line-height: 1.8;
+}
+
+@media (max-width: 768px) { .recipes-grid-container { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- Branded Page Header Banner Area -->
+<div class="banner-wrapper">
+<img src="banner.png" alt="Drippy DreamZzz Banner Layout" class="site-banner-img">
+</div>
+
+<!-- Interactive Navigation Link Grid Loops -->
+<nav>
+<a href="index.html">Home</a>
+<a href="recipes.html">Recipes</a>
+<a href="about.html">About Us</a>
+<a href="privacy.html">Privacy Policy</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+<!-- Main Workspace Container Frame -->
+<div class="main-container">
+<main class="content-area" style="flex: 1;">
+
+<!-- Dynamic Welcome Section header card -->
+<section class="recipe-card" style="text-align: center; padding: 35px 20px;">
+<h1 style="color: #432219; font-size: 2.5rem; margin: 0 0 10px 0;">Welcome to Recipes</h1>
+<p style="font-size: 1.05rem; max-width: 600px; margin: 0 auto;">
+Tap or click directly onto any dessert container below to instantly reveal the secret kitchen ingredients checklist!
+</p>
+
+<!-- Interactive Recipe Card Matrix Grid Elements -->
+<div class="recipes-grid-container">
+
+<!-- DESSERT CARD ITEM 1: CAKE POPS -->
+<div class="clickable-recipe-card" onclick="openRecipeModal('cakepops-modal')">
+<img src="cake.jpg" alt="Handmade Cake Pops" class="recipe-img" style="border-radius: 14px 14px 0 0; margin-bottom: 0;">
+<h3>Crack-Free Cake Pops</h3>
+<p style="font-size: 0.85rem; color: #e58da3 !important; font-weight: bold; margin: 5px 0 0 0;">Click to Reveal Ingredients</p>
+</div>
+
+<!-- DESSERT CARD ITEM 2: BROWNIES -->
+<div class="clickable-recipe-card" onclick="openRecipeModal('brownies-modal')">
+<img src="brownie.jpg" alt="Fudgy Homemade Brownies" class="recipe-img" style="border-radius: 14px 14px 0 0; margin-bottom: 0;">
+<h3>Fudgier Chocolate Brownies</h3>
+<p style="font-size: 0.85rem; color: #e58da3 !important; font-weight: bold; margin: 5px 0 0 0;">Click to Reveal Ingredients</p>
+</div>
+
+</div>
+</section>
+</main>
+</div>
+
+<!-- POP-UP MODAL FRAME WINDOW 1: CAKE POPS LISTING -->
+<div id="cakepops-modal" class="modal-overlay" onclick="closeRecipeModal('cakepops-modal')">
+<div class="modal-content-box" onclick="event.stopPropagation()">
+<span class="close-modal-btn" onclick="closeRecipeModal('cakepops-modal')">&times;</span>
+<h2 style="color: #432219; margin-top: 0; border-bottom: 2px solid #e58da3; padding-bottom: 8px;">Cake Pops Ingredients</h2>
+<ul class="ingredients-list-style">
+<li>1 box Vanilla or Chocolate Cake Mix (plus required oil/eggs)</li>
+<li>1/2 cup Rich Vanilla Buttercream Frosting (binder)</li>
+<li>14 oz High-Quality Pink Candy Melts / Chocolate Wafers</li>
+<li>24 Durable Lollipop Sticks / Treat Skewers</li>
+<li>2 tablespoons Paramount Crystals or Coconut Oil (for thinning)</li>
+<li>Premium Rainbow Sprinkles mixture</li>
+</ul>
+</div>
+</div>
+
+<!-- POP-UP MODAL FRAME WINDOW 2: BROWNIES LISTING -->
+<div id="brownies-modal" class="modal-overlay" onclick="closeRecipeModal('brownies-modal')">
+<div class="modal-content-box" onclick="event.stopPropagation()">
+<span class="close-modal-btn" onclick="closeRecipeModal('brownies-modal')">&times;</span>
+<h2 style="color: #432219; margin-top: 0; border-bottom: 2px solid #e58da3; padding-bottom: 8px;">Fudgy Brownies Ingredients</h2>
+<ul class="ingredients-list-style">
+<li>1 cup Unsalted Butter (melted and slightly browned)</li>
+<li>2 cups Granulated Cane Sugar</li>
+<li>4 Large Farm Eggs (at room temperature)</li>
+<li>1 cup Dutch-Process Cocoa Powder</li>
+<li>1 cup All-Purpose Baking Flour</li>
+<li>1 cup Semi-Sweet Chocolate Chunks</li>
+<li>1 teaspoon Pure Madagascar Vanilla Extract</li>
+<li>1/2 teaspoon Flaky Sea Salt flakes</li>
+</ul>
+</div>
+</div>
+
+<!-- Footer Frame Section Area Layout -->
+<footer>
+<p style="color: #fffdf9 !important;">&copy; 2026 Drippy Dreams. All Rights Reserved. | <a href="privacy.html" style="color: #e58da3;">Privacy Policy</a></p>
+</footer>
+
+<!-- INTERACTIVE EVENT DRIVEN JAVASCRIPT SYSTEM ENGINE -->
+<script>
+function openRecipeModal(modalId) {
+document.getElementById(modalId).classList.add('active');
+}
+function closeRecipeModal(modalId) {
+document.getElementById(modalId).classList.remove('active');
+}
+</script>
+
+</body>
+</html>

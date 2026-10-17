@@ -22,6 +22,48 @@ font-size: 0.95rem;
 }
 h2 { color: #432219; }
 
+/* LIVE ANIMATED BACKGROUND SYSTEM LAYERS */
+body {
+position: relative;
+overflow-x: hidden;
+}
+
+.live-bg-container {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none; /* Allows clicks to pass right through to buttons */
+z-index: -1; /* Keeps the animation behind your text cards */
+}
+
+/* Styling for the moving messaging particles */
+.floating-sprinkle {
+position: absolute;
+bottom: -60px;
+opacity: 0;
+animation: floatUp 14s linear infinite;
+}
+
+/* THE LIVE MOTION SYSTEM ENGINE */
+@keyframes floatUp {
+0% {
+transform: translateY(0) rotate(0deg);
+opacity: 0;
+}
+10% {
+opacity: 0.35; /* Soft background tint visibility */
+}
+90% {
+opacity: 0.35;
+}
+100% {
+transform: translateY(-115vh) rotate(360deg);
+opacity: 0;
+}
+}
+
 /* Premium Interactive Email Form Box Styling */
 .contact-form {
 display: flex;
@@ -76,6 +118,19 @@ transform: scale(1.02);
 </head>
 <body>
 
+<!-- THE LIVE CONTACT-RELATED BACKGROUND ANIMATIONS -->
+<div class="live-bg-container">
+<div class="floating-sprinkle" style="left: 5%; animation-delay: 0s; font-size: 24px; animation-duration: 13s;">✉️</div>
+<div class="floating-sprinkle" style="left: 12%; animation-delay: 4s; font-size: 32px; animation-duration: 16s;">💬</div>
+<div class="floating-sprinkle" style="left: 22%; animation-delay: 8s; font-size: 26px; animation-duration: 12s;">✏️</div>
+<div class="floating-sprinkle" style="left: 35%; animation-delay: 1s; font-size: 30px; animation-duration: 15s;">📬</div>
+<div class="floating-sprinkle" style="left: 48%; animation-delay: 6s; font-size: 28px; animation-duration: 14s;">💌</div>
+<div class="floating-sprinkle" style="left: 62%; animation-delay: 3s; font-size: 34px; animation-duration: 17s;">💬</div>
+<div class="floating-sprinkle" style="left: 75%; animation-delay: 10s; font-size: 24px; animation-duration: 13s;">✒️</div>
+<div class="floating-sprinkle" style="left: 88%; animation-delay: 5s; font-size: 32px; animation-duration: 15s;">✉️</div>
+<div class="floating-sprinkle" style="left: 95%; animation-delay: 2s; font-size: 26px; animation-duration: 12s;">💖</div>
+</div>
+
 <!-- Professional Branded Banner at the top -->
 <div class="banner-wrapper">
 <img src="banner.png" alt="Drippy DreamZzz Banner Layout" class="site-banner-img">
@@ -84,6 +139,7 @@ transform: scale(1.02);
 <!-- Clean Relative Navigation Menu Loop -->
 <nav>
 <a href="index.html">Home</a>
+<a href="recipes.html">Recipes</a>
 <a href="about.html">About Us</a>
 <a href="privacy.html">Privacy Policy</a>
 <a href="contact.html">Contact</a>
@@ -97,7 +153,7 @@ transform: scale(1.02);
 <p>Have a recipe question, ran into a quick baking issue with a glaze drip, or want to share pictures of your gorgeous dessert creations? Use the text boxes below! We love hearing from our community and do our absolute best to reply within 48 hours.</p>
 
 <!-- THE LIVE INTERACTIVE MESSAGE BOX SYSTEM -->
-<form class="contact-form" action="https://formspree.io/f/mnpjwalp" method="POST">
+<form class="contact-form" action="https://formspree.io" method="POST">
 <div class="form-group">
 <label for="name">Your Name</label>
 <input type="text" id="name" name="name" required placeholder="Enter your full name">
@@ -106,11 +162,6 @@ transform: scale(1.02);
 <label for="email">Email Address</label>
 <input type="email" id="email" name="email" required placeholder="name@example.com">
 </div>
-  <div class="form-group">
-<label for="contact">Contact Number</label>
-<input type="contact" id="contact" name="contact" required placeholder="123446666">
-</div>
- 
 <div class="form-group">
 <label for="message">Your Message</label>
 <textarea id="message" name="message" rows="5" required placeholder="How can we help your baking journey today?"></textarea>
@@ -121,14 +172,7 @@ transform: scale(1.02);
 </div>
 </main>
 </div>
-<aside class="sidebar-area">
-<div class="sidebar-box">
-<h3>Direct Email</h3>
-<p>For official brand partnerships, media kits, or sponsorship inquiries, you can also reach our inbox directly at:</p>
-<p><strong>mariamkhan5844@gmail.com</strong></p>
-</div>
-</aside>
-</div>
+
 <!-- Footer System Area -->
 <footer>
 <p style="color: #fffdf9 !important;">&copy; 2026 Drippy Dreams. All Rights Reserved. | <a href="privacy.html" style="color: #e58da3;">Privacy Policy</a></p>

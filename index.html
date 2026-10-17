@@ -10,6 +10,50 @@ nav a, nav a:visited { color: #ffffff !important; font-weight: bold !important; 
 nav a:hover { color: #e58da3 !important; background-color: rgba(255,255,255,0.15) !important; }
 p { color: #432219 !important; }
 
+/* LIVE ANIMATED BACKGROUND SYSTEM LAYERS */
+body {
+position: relative;
+overflow-x: hidden;
+background-color: #f7b49d; /* Main Branded Pastel Peach Base */
+}
+
+.live-bg-container {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none; /* Allows clicks to pass right through to buttons */
+z-index: -1; /* Keeps the animation behind your text cards */
+}
+
+/* Styling for the moving sprinkle particles */
+.floating-sprinkle {
+position: absolute;
+bottom: -50px;
+font-size: 24px;
+opacity: 0.25; /* Subtle background fade so it isn't distracting */
+animation: floatUp 12s linear infinite;
+}
+
+/* THE LIVE MOTION SYSTEM ENGINE */
+@keyframes floatUp {
+0% {
+transform: translateY(0) rotate(0deg);
+opacity: 0;
+}
+10% {
+opacity: 0.25;
+}
+90% {
+opacity: 0.25;
+}
+100% {
+transform: translateY(-110vh) rotate(360deg);
+opacity: 0;
+}
+}
+
 /* Custom Branded Welcome Box Header */
 .welcome-title-box {
 background: #fffdf9; /* Vanilla Cream */
@@ -101,11 +145,23 @@ color: #432219; line-height: 1.8;
 </head>
 <body>
 
+<!-- THE LIVE FLOATING BACKGROUND TRACKS -->
+<div class="live-bg-container">
+<!-- Custom staggered floating intervals -->
+<div class="floating-sprinkle" style="left: 10%; animation-delay: 0s;">✨</div>
+<div class="floating-sprinkle" style="left: 25%; animation-delay: 3s; font-size: 32px;">🍰</div>
+<div class="floating-sprinkle" style="left: 40%; animation-delay: 6s;">❤️</div>
+<div class="floating-sprinkle" style="left: 55%; animation-delay: 1s; font-size: 28px;">🧁</div>
+<div class="floating-sprinkle" style="left: 70%; animation-delay: 8s;">✨</div>
+<div class="floating-sprinkle" style="left: 85%; animation-delay: 4s; font-size: 30px;">🍩</div>
+<div class="floating-sprinkle" style="left: 95%; animation-delay: 10s;">❤️</div>
+</div>
+
 <div class="banner-wrapper">
 <img src="banner.png" alt="Drippy DreamZzz Banner Layout" class="site-banner-img">
 </div>
 
-<!-- CLEAN MENU BAR (Recipes Tab Removed to prevent duplication) -->
+<!-- CLEAN MENU BAR (Recipes Tab Removed) -->
 <nav>
 <a href="index.html">Home</a>
 <a href="about.html">About Us</a>

@@ -6,17 +6,76 @@
 <title>Welcome to Recipes - Drippy DreamZzz</title>
 <link rel="stylesheet" href="style.css">
 <style>
-/* Navigation Style Support Overrides */
 nav a, nav a:visited { color: #ffffff !important; font-weight: bold !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
 nav a:hover { color: #e58da3 !important; background-color: rgba(255,255,255,0.15) !important; }
 p { color: #432219 !important; }
 
-/* Interactive Grid Layout Rules for Recipe Grid Elements */
+/* LIVE ANIMATED BACKGROUND SYSTEM LAYERS */
+body {
+position: relative;
+overflow-x: hidden;
+background-color: #f7b49d; /* Main Branded Pastel Peach Base */
+}
+
+.live-bg-container {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none; /* Allows clicks to pass right through to buttons */
+z-index: -1; /* Keeps the animation behind your text cards */
+}
+
+/* Styling for the moving sprinkle particles */
+.floating-sprinkle {
+position: absolute;
+bottom: -50px;
+font-size: 24px;
+opacity: 0.25; /* Subtle background fade so it isn't distracting */
+animation: floatUp 12s linear infinite;
+}
+
+/* THE LIVE MOTION SYSTEM ENGINE */
+@keyframes floatUp {
+0% {
+transform: translateY(0) rotate(0deg);
+opacity: 0;
+}
+10% {
+opacity: 0.25;
+}
+90% {
+opacity: 0.25;
+}
+100% {
+transform: translateY(-110vh) rotate(360deg);
+opacity: 0;
+}
+}
+
+/* Custom Branded Welcome Box Header */
+.welcome-title-box {
+background: #fffdf9; /* Vanilla Cream */
+border: 2px solid #e58da3; /* Strawberry Pink border */
+border-radius: 20px;
+padding: 30px 20px;
+text-align: center;
+margin-bottom: 30px;
+box-shadow: 0 8px 24px rgba(67, 34, 25, 0.1);
+}
+.welcome-title-box h1 {
+color: #432219; /* Rich Chocolate Brown */
+font-size: 2.6rem;
+margin: 0 0 10px 0;
+font-weight: bold;
+}
+
 .recipes-grid-container {
 display: grid;
 grid-template-columns: 1fr 1fr;
 gap: 25px;
-margin-top: 30px;
+margin-top: 10px;
 }
 .clickable-recipe-card {
 cursor: pointer;
@@ -86,54 +145,57 @@ color: #432219; line-height: 1.8;
 </head>
 <body>
 
-<!-- Branded Page Header Banner Area -->
+<!-- THE LIVE FLOATING BACKGROUND TRACKS -->
+<div class="live-bg-container">
+<!-- Custom staggered floating intervals -->
+<div class="floating-sprinkle" style="left: 10%; animation-delay: 0s;">✨</div>
+<div class="floating-sprinkle" style="left: 25%; animation-delay: 3s; font-size: 32px;">🍰</div>
+<div class="floating-sprinkle" style="left: 40%; animation-delay: 6s;">❤️</div>
+<div class="floating-sprinkle" style="left: 55%; animation-delay: 1s; font-size: 28px;">🧁</div>
+<div class="floating-sprinkle" style="left: 70%; animation-delay: 8s;">✨</div>
+<div class="floating-sprinkle" style="left: 85%; animation-delay: 4s; font-size: 30px;">🍩</div>
+<div class="floating-sprinkle" style="left: 95%; animation-delay: 10s;">❤️</div>
+</div>
+
 <div class="banner-wrapper">
 <img src="banner.png" alt="Drippy DreamZzz Banner Layout" class="site-banner-img">
 </div>
 
-<!-- Interactive Navigation Link Grid Loops -->
+<!-- CLEAN MENU BAR (Recipes Tab Removed) -->
 <nav>
 <a href="index.html">Home</a>
-<a href="recipes.html">Recipes</a>
 <a href="about.html">About Us</a>
 <a href="privacy.html">Privacy Policy</a>
 <a href="contact.html">Contact</a>
 </nav>
 
-<!-- Main Workspace Container Frame -->
 <div class="main-container">
 <main class="content-area" style="flex: 1;">
 
-<!-- Dynamic Welcome Section header card -->
-<section class="recipe-card" style="text-align: center; padding: 35px 20px;">
-<h1 style="color: #432219; font-size: 2.5rem; margin: 0 0 10px 0;">Welcome to Recipes</h1>
-<p style="font-size: 1.05rem; max-width: 600px; margin: 0 auto;">
-Tap or click directly onto any dessert container below to instantly reveal the secret kitchen ingredients checklist!
+<!-- STYLED STANDALONE TEXT BOX -->
+<div class="welcome-title-box">
+<h1>Welcome to Recipes</h1>
+<p style="font-size: 1.05rem; margin: 0;">
+Tap or click directly onto any dessert below to instantly reveal the secret kitchen ingredients checklist!
 </p>
+</div>
 
-<!-- Interactive Recipe Card Matrix Grid Elements -->
 <div class="recipes-grid-container">
-
-<!-- DESSERT CARD ITEM 1: CAKE POPS -->
 <div class="clickable-recipe-card" onclick="openRecipeModal('cakepops-modal')">
 <img src="cake.jpg" alt="Handmade Cake Pops" class="recipe-img" style="border-radius: 14px 14px 0 0; margin-bottom: 0;">
 <h3>Crack-Free Cake Pops</h3>
 <p style="font-size: 0.85rem; color: #e58da3 !important; font-weight: bold; margin: 5px 0 0 0;">Click to Reveal Ingredients</p>
 </div>
 
-<!-- DESSERT CARD ITEM 2: BROWNIES -->
 <div class="clickable-recipe-card" onclick="openRecipeModal('brownies-modal')">
 <img src="brownie.jpg" alt="Fudgy Homemade Brownies" class="recipe-img" style="border-radius: 14px 14px 0 0; margin-bottom: 0;">
 <h3>Fudgier Chocolate Brownies</h3>
 <p style="font-size: 0.85rem; color: #e58da3 !important; font-weight: bold; margin: 5px 0 0 0;">Click to Reveal Ingredients</p>
 </div>
-
 </div>
-</section>
 </main>
 </div>
 
-<!-- POP-UP MODAL FRAME WINDOW 1: CAKE POPS LISTING -->
 <div id="cakepops-modal" class="modal-overlay" onclick="closeRecipeModal('cakepops-modal')">
 <div class="modal-content-box" onclick="event.stopPropagation()">
 <span class="close-modal-btn" onclick="closeRecipeModal('cakepops-modal')">&times;</span>
@@ -149,7 +211,6 @@ Tap or click directly onto any dessert container below to instantly reveal the s
 </div>
 </div>
 
-<!-- POP-UP MODAL FRAME WINDOW 2: BROWNIES LISTING -->
 <div id="brownies-modal" class="modal-overlay" onclick="closeRecipeModal('brownies-modal')">
 <div class="modal-content-box" onclick="event.stopPropagation()">
 <span class="close-modal-btn" onclick="closeRecipeModal('brownies-modal')">&times;</span>
@@ -167,12 +228,10 @@ Tap or click directly onto any dessert container below to instantly reveal the s
 </div>
 </div>
 
-<!-- Footer Frame Section Area Layout -->
 <footer>
 <p style="color: #fffdf9 !important;">&copy; 2026 Drippy Dreams. All Rights Reserved. | <a href="privacy.html" style="color: #e58da3;">Privacy Policy</a></p>
 </footer>
 
-<!-- INTERACTIVE EVENT DRIVEN JAVASCRIPT SYSTEM ENGINE -->
 <script>
 function openRecipeModal(modalId) {
 document.getElementById(modalId).classList.add('active');

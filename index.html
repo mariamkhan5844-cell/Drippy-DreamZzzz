@@ -753,6 +753,7 @@
                 </div>
                 <button type="button" class="dream-modal-action-btn" onclick="closeBeautifulCartSummary(); window.location.href='#orderSection';">Verify Order</button>
                 <button type="button" class="dream-modal-action-btn" style="background:#ec1c7a; color:#fff; width:100%; margin-top:10px;" onclick="sendOrderToEmail();">📧 Send Order to Drippy Dreams</button>
+                <button type="button" class="dream-modal-action-btn" style="background:#fff; color:#dc2626; border:2px solid #f9a8d4; width:100%; margin-top:10px;" onclick="clearCartManually();">🗑️ Clear Cart</button>
                 <div id="orderSuccessMsg" style="display:none; background:#dcfce7; border:2px solid #16a34a; color:#14532d; font-weight:800; font-size:14px; text-align:center; padding:12px; border-radius:12px; margin-top:10px;">✅ Your order has been sent to the owner. Thank you! We will reply to confirm it. 💗</div>
                 <div id="orderErrorMsg" style="display:none; background:#fee2e2; border:2px solid #dc2626; color:#7f1d1d; font-weight:800; font-size:13px; text-align:center; padding:12px; border-radius:12px; margin-top:10px;">Sorry, your order could not be sent. Please try again.</div>
                 <p style="font-size:12px; color:#666; text-align:center; margin-top:8px;">Clicking Send Order emails your full order to us. We will reply to confirm it.</p>
@@ -1848,11 +1849,11 @@
             bodyNode.innerHTML = htmlStream;
             
             // Fire open modal transition animation classes
-            modalNode.classList.add('modal-active');
+            modalNode.classList.add('modal-active'); lockPageScroll();
         }
 
         function closeBeautifulCartSummary() {
-            document.getElementById('dreamCartModal').classList.remove('modal-active');
+            document.getElementById('dreamCartModal').classList.remove('modal-active'); unlockPageScroll();
         }
 
         // --- BACKGROUND AMBIENT RENDERING TIMERS & FLOATING LOOP TRACKS ---
@@ -1896,11 +1897,11 @@
         runLiveBakingCalculations();
         // --- BRANDED CONTACT POPUP CONTROLLER PIPELINES ---
         function openBrandedContactBox() {
-            document.getElementById('dreamContactModal').classList.add('contact-modal-active');
+            document.getElementById('dreamContactModal').classList.add('contact-modal-active'); lockPageScroll();
         }
 
         function closeBrandedContactBox() {
-            document.getElementById('dreamContactModal').classList.remove('contact-modal-active');
+            document.getElementById('dreamContactModal').classList.remove('contact-modal-active'); unlockPageScroll();
             document.getElementById('adminDirectContactForm').reset();
             document.querySelectorAll('.contact-field-required-msg').forEach(msg => msg.style.display = 'none');
         }
@@ -1972,6 +1973,41 @@
             );
         }
 
+        function clearCartState() {
+            cartState.cakePops.quantity = 0;
+            cartState.cakePops.themeText = '';
+            if (cartState.cakePops.flavors) cartState.cakePops.flavors = {};
+            cartState.oreos.quantity = 0;
+            cartState.pretzels.rodQty = 0;
+            cartState.pretzels.loopQty = 0;
+            cartState.pretzels.decorateStyle = 'standard';
+            cartState.riceKrispies.quantity = 0;
+            cartState.strawberries.quantity = 0;
+            const themeBox = document.getElementById('popDesignNotes');
+            if (themeBox) themeBox.value = '';
+            const strawEl = document.getElementById('strawberryAddon');
+            const wrapEl = document.getElementById('wrappingAddon');
+            if (strawEl) strawEl.checked = false;
+            if (wrapEl) wrapEl.checked = false;
+            if (typeof deliveryFee !== 'undefined') deliveryFee = 0;
+            document.querySelectorAll('.category-standalone-qty, .flavor-qty-input').forEach(el => { el.value = 0; });
+            if (typeof runLiveBakingCalculations === 'function') runLiveBakingCalculations();
+        }
+        function clearCartManually() {
+            const totalPieces = (cartState.cakePops.quantity || 0) + (cartState.oreos.quantity || 0)
+                + (cartState.pretzels.rodQty || 0) + (cartState.pretzels.loopQty || 0)
+                + (cartState.riceKrispies.quantity || 0) + (cartState.strawberries.quantity || 0);
+            if (totalPieces <= 0) { alert('Your basket is already empty. 🛒'); return; }
+            if (!confirm('Clear your whole basket?')) return;
+            clearCartState();
+            openBeautifulCartSummary();
+        }
+        function generateOrderNumber() {
+            const d = new Date();
+            const ymd = '' + d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
+            const rand = String(Math.floor(1000 + Math.random() * 9000));
+            return 'DD-' + ymd + '-' + rand;
+        }
         function sendOrderToEmail() {
             const totalPieces = (cartState.cakePops.quantity || 0) + (cartState.oreos.quantity || 0)
                 + (cartState.pretzels.rodQty || 0) + (cartState.pretzels.loopQty || 0)
@@ -1990,7 +2026,9 @@
                 window.location.href = '#orderSection';
                 return;
             }
+            const orderNumber = generateOrderNumber();
             let lines = [];
+            lines.push('Order Number: ' + orderNumber);
             if (cartState.cakePops.quantity > 0) {
                 let flavourTxt = '';
                 if (cartState.cakePops.flavors) {
@@ -2021,10 +2059,16 @@
             if (orderSuccessBox) orderSuccessBox.style.display = 'none';
             if (orderErrorBox) orderErrorBox.style.display = 'none';
             submitToDrippyEmail(
-                { name: custName, email: custEmail, order: orderText },
-                'New Order - Drippy DreamZzzz',
+                { name: custName, email: custEmail, order: orderText, order_number: orderNumber },
+                'New Order ' + orderNumber + ' - Drippy DreamZzzz',
                 function() {
-                    if (orderSuccessBox) orderSuccessBox.style.display = 'block';
+                    clearCartState();
+                    openBeautifulCartSummary();
+                    const box = document.getElementById('orderSuccessMsg');
+                    if (box) {
+                        box.innerHTML = '✅ Your order has been sent to the owner! 💗<br>Your Order Number is <strong>' + orderNumber + '</strong><br>Please keep this number. We will reply to confirm it.';
+                        box.style.display = 'block';
+                    }
                 }
             );
         }
@@ -2283,12 +2327,44 @@
         function openPolicyPopup(page, title) {
             document.getElementById('policyModalTitle').innerText = title;
             document.getElementById('policyIframe').src = page;
-            document.getElementById('policyModal').classList.add('contact-modal-active');
+            document.getElementById('policyModal').classList.add('contact-modal-active'); lockPageScroll();
         }
         function closePolicyPopup() {
-            document.getElementById('policyModal').classList.remove('contact-modal-active');
+            document.getElementById('policyModal').classList.remove('contact-modal-active'); unlockPageScroll();
         }
     </script>
+
+    <style>
+        /* --- ALL MODALS MOBILE SCROLL FIX (from the phone video: popups were stuck, page behind moved) --- */
+        html, body { overflow-x: hidden !important; max-width: 100% !important; }
+        .dream-contact-modal-overlay, .dream-cart-modal-overlay {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+        .dream-contact-modal-overlay.contact-modal-active, .dream-cart-modal-overlay.modal-active {
+            display: block !important;
+            overflow-y: scroll !important;
+            -webkit-overflow-scrolling: touch !important;
+            overscroll-behavior: contain !important;
+            touch-action: pan-y !important;
+            padding: 16px 10px 80px 10px !important;
+            box-sizing: border-box !important;
+        }
+        .dream-contact-modal-overlay .dream-cart-window-card, .dream-cart-modal-overlay .dream-cart-window-card {
+            transform: none !important;
+            max-height: none !important;
+            overflow: visible !important;
+            margin: 16px auto 80px auto !important;
+            width: calc(100% - 20px) !important;
+            box-sizing: border-box !important;
+        }
+        #pricingModal .dream-cart-window-card { max-width: 560px !important; }
+        #policyModal .dream-cart-window-card { max-width: 820px !important; }
+        .dream-modal-stream-body { max-height: none !important; overflow: visible !important; }
+        .dream-cart-window-card input, .dream-cart-window-card textarea, .dream-cart-window-card select {
+            max-width: 100% !important; box-sizing: border-box !important;
+        }
+    </style>
 
 </body>
 </html>

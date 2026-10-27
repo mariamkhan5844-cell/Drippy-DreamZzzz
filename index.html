@@ -1283,8 +1283,8 @@
 
 
         // --- PRICING LIST POPUP ---
-        function openPricingPopup() { document.getElementById('pricingModal').classList.add('contact-modal-active'); }
-        function closePricingPopup() { document.getElementById('pricingModal').classList.remove('contact-modal-active'); }
+        function openPricingPopup() { document.getElementById('pricingModal').classList.add('contact-modal-active'); document.body.style.overflow = 'hidden'; }
+        function closePricingPopup() { document.getElementById('pricingModal').classList.remove('contact-modal-active'); document.body.style.overflow = ''; }
 
         // --- CATEGORY POPUP: same screen as cake pops, for Oreos / Pretzels / Rice Krispies / Strawberries ---
         let currentCategory = null;
@@ -2124,6 +2124,33 @@
     </div>
 
 
+    <style>
+        /* --- PRICING POPUP MOBILE SCROLL FIX --- */
+        #pricingModal {
+            position: fixed !important;
+            height: 100% !important;
+            height: 100dvh !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            overscroll-behavior: contain !important;
+            touch-action: pan-y !important;
+            align-items: flex-start !important;
+            justify-content: center !important;
+            padding: 16px 10px 40px 10px !important;
+            box-sizing: border-box !important;
+        }
+        #pricingModal .dream-cart-window-card {
+            max-height: none !important;
+            overflow: visible !important;
+            margin: 0 auto !important;
+            flex-shrink: 0 !important;
+            width: calc(100% - 20px) !important;
+        }
+        @media (max-width: 600px) {
+            #pricingModal { padding: 12px 8px 60px 8px !important; }
+            #pricingModal .dream-cart-window-card { padding: 22px 16px !important; }
+        }
+    </style>
     <!-- Pricing List Popup: full price list from the website, no selection needed -->
     <div id="pricingModal" class="dream-contact-modal-overlay" onclick="if(event.target===this) closePricingPopup();">
         <div class="dream-cart-window-card" style="text-align:left; max-width:560px; background:linear-gradient(135deg, #fff7fa 0%, #ffe4ec 100%); border:2px solid #f9a8d4; border-radius:20px; box-shadow:0 12px 30px rgba(236,28,122,0.25); padding:28px 24px;">

@@ -767,6 +767,7 @@
             <a href="#" class="site-logo">
                 <img src="logo.png" alt="Drippy DreamZzzz Corporate Badge">
             </a>
+                        <button type="button" id="phoneMenuBarBtn" onclick="togglePhoneMenu()">☰ Menu</button>
                         <nav>
                 <ul class="nav-links-list">
                     <li><a href="index.html" style="color: #7B3F00;">🏠 Home</a></li>
@@ -2184,7 +2185,7 @@
     <div id="pricingModal" class="dream-contact-modal-overlay" onclick="if(event.target===this) closePricingPopup();">
         <div class="dream-cart-window-card" style="text-align:left; max-width:560px; background:linear-gradient(135deg, #fff7fa 0%, #ffe4ec 100%); border:2px solid #f9a8d4; border-radius:20px; box-shadow:0 12px 30px rgba(236,28,122,0.25); padding:28px 24px;">
             <div class="dream-modal-header" style="border-bottom:2px solid #f9a8d4;">
-                <h4 style="font-size:22px; color:#be185d;">💰 Drippy DreamZzzz Pricing List 💗 <span style="font-size:13px;">v6</span></h4>
+                <h4 style="font-size:22px; color:#be185d;">💰 Drippy DreamZzzz Pricing List 💗 <span style="font-size:13px;">v8</span></h4>
                 <button type="button" class="dream-modal-close-trigger" onclick="closePricingPopup()">&times;</button>
             </div>
             <p style="font-size:16px; font-weight:600; color:#6b2d3f; line-height:1.6; margin-bottom:18px;">Here is our full price list, sweetheart! 💗 No need to select anything first — just check and pick your favourites. ✨</p>
@@ -2384,6 +2385,65 @@
                     if (card) card.scrollTop = card.scrollTop; // keep card in place, no stuck zoomed position
                     window.scrollTo(0, 0);
                 }, 100);
+            });
+        });
+    </script>
+
+    <style>
+        /* ===== PHONE-ONLY MENU THEME: light pink menu + animated logo (desktop unchanged) ===== */
+        @keyframes drippyLogoFloat {
+            0%, 100% { transform: translateY(0) rotate(-1deg) scale(1); }
+            50% { transform: translateY(-6px) rotate(1.5deg) scale(1.04); }
+        }
+        @media (max-width: 768px) {
+            /* Phone menu: light pink */
+            .nav-links-list {
+                background: linear-gradient(135deg, #ffd9e8 0%, #ffe4ec 100%) !important;
+                border: 2px solid #f9a8d4 !important;
+                border-radius: 30px !important;
+                padding: 12px 15px !important;
+                box-shadow: 0 4px 15px rgba(236, 28, 122, 0.18) !important;
+            }
+            /* Phone logo: gentle floating animation */
+            .site-logo img {
+                animation: drippyLogoFloat 3s ease-in-out infinite !important;
+            }
+        }
+    </style>
+
+    <style>
+        /* ===== PHONE MENU BAR: hamburger bar on phones only (desktop unchanged) ===== */
+        #phoneMenuBarBtn { display: none; }
+        @media (max-width: 768px) {
+            #phoneMenuBarBtn {
+                display: block !important; width: 100% !important;
+                background: linear-gradient(135deg, #ffd9e8 0%, #ffe4ec 100%) !important;
+                border: 2px solid #f9a8d4 !important; border-radius: 30px !important;
+                padding: 13px 18px !important; font-size: 17px !important; font-weight: 800 !important;
+                color: #4A2E2B !important; cursor: pointer !important;
+                box-shadow: 0 4px 15px rgba(236, 28, 122, 0.18) !important;
+            }
+            .nav-links-list { display: none !important; }
+            .nav-links-list.menu-open {
+                display: flex !important; flex-direction: column !important;
+                align-items: center !important; gap: 14px !important; margin-top: 12px !important;
+            }
+        }
+    </style>
+    <script>
+        function togglePhoneMenu() {
+            var list = document.querySelector('.nav-links-list');
+            var btn = document.getElementById('phoneMenuBarBtn');
+            if (!list) return;
+            list.classList.toggle('menu-open');
+            if (btn) btn.innerText = list.classList.contains('menu-open') ? '✕ Close Menu' : '☰ Menu';
+        }
+        document.querySelectorAll('.nav-links-list a').forEach(function(a) {
+            a.addEventListener('click', function() {
+                var list = document.querySelector('.nav-links-list');
+                var btn = document.getElementById('phoneMenuBarBtn');
+                if (list) list.classList.remove('menu-open');
+                if (btn) btn.innerText = '☰ Menu';
             });
         });
     </script>

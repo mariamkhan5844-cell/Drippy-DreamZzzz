@@ -1283,8 +1283,27 @@
 
 
         // --- PRICING LIST POPUP ---
-        function openPricingPopup() { document.getElementById('pricingModal').classList.add('contact-modal-active'); document.body.style.overflow = 'hidden'; }
-        function closePricingPopup() { document.getElementById('pricingModal').classList.remove('contact-modal-active'); document.body.style.overflow = ''; }
+        let _savedScrollY = 0;
+        function lockPageScroll() {
+            _savedScrollY = window.scrollY || 0;
+            document.body.style.position = 'fixed';
+            document.body.style.top = (-_savedScrollY) + 'px';
+            document.body.style.left = '0';
+            document.body.style.right = '0';
+            document.body.style.width = '100%';
+            document.documentElement.style.overflow = 'hidden';
+        }
+        function unlockPageScroll() {
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.left = '';
+            document.body.style.right = '';
+            document.body.style.width = '';
+            document.documentElement.style.overflow = '';
+            window.scrollTo(0, _savedScrollY);
+        }
+        function openPricingPopup() { document.getElementById('pricingModal').classList.add('contact-modal-active'); lockPageScroll(); }
+        function closePricingPopup() { document.getElementById('pricingModal').classList.remove('contact-modal-active'); unlockPageScroll(); }
 
         // --- CATEGORY POPUP: same screen as cake pops, for Oreos / Pretzels / Rice Krispies / Strawberries ---
         let currentCategory = null;
@@ -1325,10 +1344,10 @@
             document.querySelector('input[name="popupCatDeliveryMethod"][value="' + deliveryValue + '"]').checked = true;
             updateCategoryPopupDelivery();
             updateCategoryPopupState();
-            document.getElementById('categoryQtyModal').classList.add('contact-modal-active'); document.body.style.overflow = 'hidden';
+            document.getElementById('categoryQtyModal').classList.add('contact-modal-active'); lockPageScroll();
         }
         function closeCategoryPopup() {
-            document.getElementById('categoryQtyModal').classList.remove('contact-modal-active'); document.body.style.overflow = '';
+            document.getElementById('categoryQtyModal').classList.remove('contact-modal-active'); unlockPageScroll();
             currentCategory = null;
         }
         function syncCategoryCustomer() {
@@ -1435,10 +1454,10 @@
             document.querySelector('input[name="popupDeliveryMethod"][value="' + deliveryValue + '"]').checked = true;
             updateFlavorPopupDelivery();
             updateFlavorPopupState();
-            document.getElementById('flavorQtyModal').classList.add('contact-modal-active'); document.body.style.overflow = 'hidden';
+            document.getElementById('flavorQtyModal').classList.add('contact-modal-active'); lockPageScroll();
         }
         function closeFlavorPopup() {
-            document.getElementById('flavorQtyModal').classList.remove('contact-modal-active'); document.body.style.overflow = '';
+            document.getElementById('flavorQtyModal').classList.remove('contact-modal-active'); unlockPageScroll();
             currentFlavorCard = null;
         }
         var deliveryFee = 0;
@@ -2124,6 +2143,25 @@
     </div>
 
 
+    <style>
+        /* --- ORDER POPUP MOBILE SCROLL FIX v2: block scroll, no flex/scale trap --- */
+        #flavorQtyModal.contact-modal-active, #categoryQtyModal.contact-modal-active {
+            display: block !important;
+            overflow-y: scroll !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+        #flavorQtyModal, #categoryQtyModal {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+        #flavorQtyModal .dream-cart-window-card, #categoryQtyModal .dream-cart-window-card {
+            transform: none !important;
+            margin: 16px auto 100px auto !important;
+        }
+        @media (max-width: 768px) {
+            #flavorQtyModal, #categoryQtyModal { padding-left: 8px !important; padding-right: 8px !important; }
+        }
+    </style>
     <style>
         /* --- ORDER POPUP MOBILE SCROLL FIX (flavour + category) --- */
         #flavorQtyModal, #categoryQtyModal {

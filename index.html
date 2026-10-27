@@ -722,6 +722,8 @@
                     <textarea id="contactAuthQuery" class="form-field-input" rows="4" placeholder="Type your administration or billing query here..." required></textarea>
                     <span class="contact-field-required-msg">Field required with *</span>
                 </div>
+                <div id="contactSuccessMsg" style="display:none; background:#dcfce7; border:2px solid #16a34a; color:#14532d; font-weight:800; font-size:14px; text-align:center; padding:12px; border-radius:12px; margin-bottom:15px;">✅ Your message has been sent to the owner. Thank you! We will reply to you soon. 💗</div>
+                <div id="contactErrorMsg" style="display:none; background:#fee2e2; border:2px solid #dc2626; color:#7f1d1d; font-weight:800; font-size:13px; text-align:center; padding:12px; border-radius:12px; margin-bottom:15px;">Sorry, your message could not be sent. Please try again.</div>
                 <button type="submit" class="form-submit-trigger" style="padding:12px;">Transmit Message Request</button>
             </form>
         </div>
@@ -751,6 +753,8 @@
                 </div>
                 <button type="button" class="dream-modal-action-btn" onclick="closeBeautifulCartSummary(); window.location.href='#orderSection';">Verify Order</button>
                 <button type="button" class="dream-modal-action-btn" style="background:#ec1c7a; color:#fff; width:100%; margin-top:10px;" onclick="sendOrderToEmail();">📧 Send Order to Drippy Dreams</button>
+                <div id="orderSuccessMsg" style="display:none; background:#dcfce7; border:2px solid #16a34a; color:#14532d; font-weight:800; font-size:14px; text-align:center; padding:12px; border-radius:12px; margin-top:10px;">✅ Your order has been sent to the owner. Thank you! We will reply to confirm it. 💗</div>
+                <div id="orderErrorMsg" style="display:none; background:#fee2e2; border:2px solid #dc2626; color:#7f1d1d; font-weight:800; font-size:13px; text-align:center; padding:12px; border-radius:12px; margin-top:10px;">Sorry, your order could not be sent. Please try again.</div>
                 <p style="font-size:12px; color:#666; text-align:center; margin-top:8px;">Clicking Send Order emails your full order to us. We will reply to confirm it.</p>
             </div>
         </div>
@@ -1882,25 +1886,39 @@
             document.querySelectorAll('.contact-field-required-msg').forEach(msg => msg.style.display = 'none');
         }
 
-        function submitToDrippyEmail(fields, subject) {
-            const form = document.createElement('form');
-            form.action = 'https://formsubmit.co/ertyriaz716@gmail.com';
-            form.method = 'POST';
-            form.style.display = 'none';
-            const add = (name, value) => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = name;
-                input.value = value;
-                form.appendChild(input);
-            };
-            for (const key in fields) { add(key, fields[key]); }
-            add('_subject', subject);
-            add('_captcha', 'false');
-            add('_template', 'table');
-            add('_next', window.location.href);
-            document.body.appendChild(form);
-            form.submit();
+        function submitToDrippyEmail(fields, subject, onSuccess) {
+            // Try AJAX first: stays on the page so we can show "sent to the owner" right there.
+            // If AJAX fails, fall back to a normal form submit (email still goes out).
+            const fd = new FormData();
+            for (const key in fields) { fd.append(key, fields[key]); }
+            fd.append('_subject', subject);
+            fd.append('_captcha', 'false');
+            fd.append('_template', 'table');
+            fetch('https://formsubmit.co/ajax/ertyriaz716@gmail.com', { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } })
+                .then(res => {
+                    if (res.ok) { if (onSuccess) onSuccess(); }
+                    else { throw new Error('ajax failed'); }
+                })
+                .catch(() => {
+                    const form = document.createElement('form');
+                    form.action = 'https://formsubmit.co/ertyriaz716@gmail.com';
+                    form.method = 'POST';
+                    form.style.display = 'none';
+                    const add = (name, value) => {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = name;
+                        input.value = value;
+                        form.appendChild(input);
+                    };
+                    for (const key in fields) { add(key, fields[key]); }
+                    add('_subject', subject);
+                    add('_captcha', 'false');
+                    add('_template', 'table');
+                    add('_next', window.location.href);
+                    document.body.appendChild(form);
+                    form.submit();
+                });
         }
 
         function transmitContactInquiryEmail() {
@@ -1919,12 +1937,20 @@
 
             if (validationFailed) return;
 
-            // Sends the message straight to ertyriaz716@gmail.com - no email app needed
+            // Sends the message straight to ertyriaz716@gmail.com - no email app needed,
+            // then shows "sent to the owner" right inside this popup.
+            const successBox = document.getElementById('contactSuccessMsg');
+            const errorBox = document.getElementById('contactErrorMsg');
+            if (successBox) successBox.style.display = 'none';
+            if (errorBox) errorBox.style.display = 'none';
             submitToDrippyEmail(
                 { name: name, email: email, phone: phone, message: query },
-                'New Contact - Drippy DreamZzzz'
+                'New Contact - Drippy DreamZzzz',
+                function() {
+                    if (successBox) successBox.style.display = 'block';
+                    document.getElementById('adminDirectContactForm').reset();
+                }
             );
-            closeBrandedContactBox();
         }
 
         function sendOrderToEmail() {
@@ -1971,9 +1997,16 @@
             const totalTxt = (document.getElementById('modalSummaryPriceText') && document.getElementById('modalSummaryPriceText').innerText) || '';
             if (totalTxt) lines.push('Total Price: ' + totalTxt);
             const orderText = lines.join('\n');
+            const orderSuccessBox = document.getElementById('orderSuccessMsg');
+            const orderErrorBox = document.getElementById('orderErrorMsg');
+            if (orderSuccessBox) orderSuccessBox.style.display = 'none';
+            if (orderErrorBox) orderErrorBox.style.display = 'none';
             submitToDrippyEmail(
                 { name: custName, email: custEmail, order: orderText },
-                'New Order - Drippy DreamZzzz'
+                'New Order - Drippy DreamZzzz',
+                function() {
+                    if (orderSuccessBox) orderSuccessBox.style.display = 'block';
+                }
             );
         }
 

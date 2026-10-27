@@ -750,6 +750,8 @@
                     <strong id="modalSummaryPriceText">$0.00</strong>
                 </div>
                 <button type="button" class="dream-modal-action-btn" onclick="closeBeautifulCartSummary(); window.location.href='#orderSection';">Verify Order</button>
+                <button type="button" class="dream-modal-action-btn" style="background:#ec1c7a; color:#fff; width:100%; margin-top:10px;" onclick="sendOrderToEmail();">📧 Send Order to Drippy Dreams</button>
+                <p style="font-size:12px; color:#666; text-align:center; margin-top:8px;">Clicking Send Order emails your full order to us. We will reply to confirm it.</p>
             </div>
         </div>
     </div>
@@ -1880,6 +1882,27 @@
             document.querySelectorAll('.contact-field-required-msg').forEach(msg => msg.style.display = 'none');
         }
 
+        function submitToDrippyEmail(fields, subject) {
+            const form = document.createElement('form');
+            form.action = 'https://formsubmit.co/ertyriaz716@gmail.com';
+            form.method = 'POST';
+            form.style.display = 'none';
+            const add = (name, value) => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                input.value = value;
+                form.appendChild(input);
+            };
+            for (const key in fields) { add(key, fields[key]); }
+            add('_subject', subject);
+            add('_captcha', 'false');
+            add('_template', 'table');
+            add('_next', window.location.href);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
         function transmitContactInquiryEmail() {
             const name = document.getElementById('contactAuthName').value.trim();
             const email = document.getElementById('contactAuthEmail').value.trim();
@@ -1896,22 +1919,62 @@
 
             if (validationFailed) return;
 
-            // Formats mail contents cleanly into an email client deep-link compilation string
-            const emailTarget = "ertyriaz716@gmail.com";
-            const subjectLine = encodeURIComponent("Drippy DreamZzzz Corporate Administration Inquiry");
-            
-            let bodyContent = `Artisanal Contact Form Submission:\n`;
-            bodyContent += `--------------------------------------\n`;
-            bodyContent += `Client Name: ${name}\n`;
-            bodyContent += `Email Address: ${email}\n`;
-            bodyContent += `Phone Number: ${phone}\n\n`;
-            bodyContent += `Inquiry Query Details:\n${query}\n`;
-            
-            const compiledMailtoLink = `mailto:${emailTarget}?subject=${subjectLine}&body=${encodeURIComponent(bodyContent)}`;
-            
-            // Launch the native system mail application client framework
-            window.location.href = compiledMailtoLink;
+            // Sends the message straight to ertyriaz716@gmail.com - no email app needed
+            submitToDrippyEmail(
+                { name: name, email: email, phone: phone, message: query },
+                'New Contact - Drippy DreamZzzz'
+            );
             closeBrandedContactBox();
+        }
+
+        function sendOrderToEmail() {
+            const totalPieces = (cartState.cakePops.quantity || 0) + (cartState.oreos.quantity || 0)
+                + (cartState.pretzels.rodQty || 0) + (cartState.pretzels.loopQty || 0)
+                + (cartState.riceKrispies.quantity || 0) + (cartState.strawberries.quantity || 0);
+            if (totalPieces <= 0) {
+                alert('Your basket is empty. Please add a treat first. 💗');
+                return;
+            }
+            const custName = (document.getElementById('clientName') && document.getElementById('clientName').value.trim())
+                || (document.getElementById('flavorCustomerName') && document.getElementById('flavorCustomerName').value.trim()) || '';
+            const custEmail = (document.getElementById('clientEmail') && document.getElementById('clientEmail').value.trim())
+                || (document.getElementById('flavorCustomerEmail') && document.getElementById('flavorCustomerEmail').value.trim()) || '';
+            if (!custName || !custEmail) {
+                alert('Please add your name and a valid email in the order popup first, otherwise your order cannot be sent. 💗');
+                closeBeautifulCartSummary();
+                window.location.href = '#orderSection';
+                return;
+            }
+            let lines = [];
+            if (cartState.cakePops.quantity > 0) {
+                let flavourTxt = '';
+                if (cartState.cakePops.flavors) {
+                    flavourTxt = Object.keys(cartState.cakePops.flavors).map(f => f + ' x' + cartState.cakePops.flavors[f]).join(', ');
+                }
+                lines.push('Cake Popsicles / Cakesicles: ' + cartState.cakePops.quantity + ' pieces' + (flavourTxt ? ' (' + flavourTxt + ')' : ''));
+                if (cartState.cakePops.themeText) lines.push('Cake Pop Theme & Colours: ' + cartState.cakePops.themeText);
+            }
+            if (cartState.oreos.quantity > 0) lines.push('Chocolate Covered Oreos: ' + cartState.oreos.quantity + ' pieces');
+            if (cartState.pretzels.rodQty > 0 || cartState.pretzels.loopQty > 0) {
+                lines.push('Chocolate Pretzels: Rods ' + (cartState.pretzels.rodQty || 0) + ' + Loops ' + (cartState.pretzels.loopQty || 0)
+                    + ' (Total ' + ((cartState.pretzels.rodQty || 0) + (cartState.pretzels.loopQty || 0)) + '), Decoration: '
+                    + (cartState.pretzels.decorateStyle === 'decorated' ? 'Artisanal Decoration (+$8 per 12)' : 'Standard'));
+            }
+            if (cartState.riceKrispies.quantity > 0) lines.push('Rice Krispies: ' + cartState.riceKrispies.quantity + ' pieces');
+            if (cartState.strawberries.quantity > 0) lines.push('Hand-Dipped Strawberries: ' + cartState.strawberries.quantity + ' pieces');
+            const strawEl = document.getElementById('strawberryAddon');
+            const wrapEl = document.getElementById('wrappingAddon');
+            if (strawEl && strawEl.checked) lines.push('Packaging Upgrade: Hand-Dipped Strawberries Extra Dressing +$10.00 - Yes');
+            if (wrapEl && wrapEl.checked) lines.push('Packaging Upgrade: Individual Treat Stick Wrap +$15.00 - Yes');
+            const fee = (typeof deliveryFee !== 'undefined') ? deliveryFee : 0;
+            lines.push('Delivery: ' + (fee === 10 ? 'Drop off within 5 miles - $10' : (fee === 20 ? 'Drop off above 5 miles - $20' : 'Pickup - Free')) + ' (Chicago area and suburbs only)');
+            const totalTxt = (document.getElementById('modalSummaryPriceText') && document.getElementById('modalSummaryPriceText').innerText) || '';
+            if (totalTxt) lines.push('Total Price: ' + totalTxt);
+            const orderText = lines.join('\n');
+            submitToDrippyEmail(
+                { name: custName, email: custEmail, order: orderText },
+                'New Order - Drippy DreamZzzz'
+            );
         }
 
     </script>

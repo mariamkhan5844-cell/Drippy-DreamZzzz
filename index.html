@@ -1284,6 +1284,12 @@
 
 
         // --- PRICING LIST POPUP ---
+        function closeOtherModals(exceptId) {
+            ['flavorQtyModal','categoryQtyModal','pricingModal','dreamContactModal','policyModal','orderConfirmModal'].forEach(function(id) {
+                if (id !== exceptId) { const el = document.getElementById(id); if (el) el.classList.remove('contact-modal-active'); }
+            });
+            if (exceptId !== 'dreamCartModal') { const cart = document.getElementById('dreamCartModal'); if (cart) cart.classList.remove('modal-active'); }
+        }
         let _savedScrollY = 0;
         function lockPageScroll() {
             _savedScrollY = window.scrollY || 0;
@@ -1303,7 +1309,7 @@
             document.documentElement.style.overflow = '';
             window.scrollTo(0, _savedScrollY);
         }
-        function openPricingPopup() { document.getElementById('pricingModal').classList.add('contact-modal-active'); lockPageScroll(); }
+        function openPricingPopup() { closeOtherModals('pricingModal'); document.getElementById('pricingModal').classList.add('contact-modal-active'); lockPageScroll(); }
         function closePricingPopup() { document.getElementById('pricingModal').classList.remove('contact-modal-active'); unlockPageScroll(); }
 
         // --- CATEGORY POPUP: same screen as cake pops, for Oreos / Pretzels / Rice Krispies / Strawberries ---
@@ -1345,7 +1351,7 @@
             document.querySelector('input[name="popupCatDeliveryMethod"][value="' + deliveryValue + '"]').checked = true;
             updateCategoryPopupDelivery();
             updateCategoryPopupState();
-            document.getElementById('categoryQtyModal').classList.add('contact-modal-active'); lockPageScroll();
+            closeOtherModals('categoryQtyModal'); document.getElementById('categoryQtyModal').classList.add('contact-modal-active'); lockPageScroll();
         }
         function closeCategoryPopup() {
             document.getElementById('categoryQtyModal').classList.remove('contact-modal-active'); unlockPageScroll();
@@ -1455,7 +1461,7 @@
             document.querySelector('input[name="popupDeliveryMethod"][value="' + deliveryValue + '"]').checked = true;
             updateFlavorPopupDelivery();
             updateFlavorPopupState();
-            document.getElementById('flavorQtyModal').classList.add('contact-modal-active'); lockPageScroll();
+            closeOtherModals('flavorQtyModal'); document.getElementById('flavorQtyModal').classList.add('contact-modal-active'); lockPageScroll();
         }
         function closeFlavorPopup() {
             document.getElementById('flavorQtyModal').classList.remove('contact-modal-active'); unlockPageScroll();
@@ -1849,7 +1855,7 @@
             bodyNode.innerHTML = htmlStream;
             
             // Fire open modal transition animation classes
-            modalNode.classList.add('modal-active'); lockPageScroll();
+            closeOtherModals('dreamCartModal'); modalNode.classList.add('modal-active'); lockPageScroll();
         }
 
         function closeBeautifulCartSummary() {
@@ -1897,7 +1903,7 @@
         runLiveBakingCalculations();
         // --- BRANDED CONTACT POPUP CONTROLLER PIPELINES ---
         function openBrandedContactBox() {
-            document.getElementById('dreamContactModal').classList.add('contact-modal-active'); lockPageScroll();
+            closeOtherModals('dreamContactModal'); document.getElementById('dreamContactModal').classList.add('contact-modal-active'); lockPageScroll();
         }
 
         function closeBrandedContactBox() {
@@ -2062,13 +2068,10 @@
                 { name: custName, email: custEmail, order: orderText, order_number: orderNumber },
                 'New Order ' + orderNumber + ' - Drippy DreamZzzz',
                 function() {
-                    clearCartState();
-                    openBeautifulCartSummary();
-                    const box = document.getElementById('orderSuccessMsg');
-                    if (box) {
-                        box.innerHTML = '✅ Your order has been sent to the owner! 💗<br>Your Order Number is <strong>' + orderNumber + '</strong><br>Please keep this number. We will reply to confirm it.';
-                        box.style.display = 'block';
-                    }
+                    // Order reached us (email sent). Show confirmation FIRST, empty cart only when it is closed.
+                    document.getElementById('dreamCartModal').classList.remove('modal-active');
+                    unlockPageScroll();
+                    openOrderConfirm(orderNumber);
                 }
             );
         }
@@ -2327,7 +2330,7 @@
         function openPolicyPopup(page, title) {
             document.getElementById('policyModalTitle').innerText = title;
             document.getElementById('policyIframe').src = page;
-            document.getElementById('policyModal').classList.add('contact-modal-active'); lockPageScroll();
+            closeOtherModals('policyModal'); document.getElementById('policyModal').classList.add('contact-modal-active'); lockPageScroll();
         }
         function closePolicyPopup() {
             document.getElementById('policyModal').classList.remove('contact-modal-active'); unlockPageScroll();
@@ -2365,6 +2368,44 @@
             max-width: 100% !important; box-sizing: border-box !important;
         }
     </style>
+
+    <style>
+        /* --- POPUP GHOST/DOUBLE-LAYER FIX: darker overlay so the page behind cannot show through --- */
+        .dream-contact-modal-overlay, .dream-cart-modal-overlay {
+            background-color: rgba(43, 22, 20, 0.88) !important;
+        }
+    </style>
+    <script>
+        // When the phone keyboard opens inside an order popup, scroll the tapped field into view
+        document.querySelectorAll('#flavorQtyModal input, #flavorQtyModal textarea, #categoryQtyModal input, #categoryQtyModal textarea, #dreamContactModal input, #dreamContactModal textarea').forEach(function(el) {
+            el.addEventListener('focus', function() { setTimeout(function() { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 300); });
+        });
+    </script>
+
+    <!-- Order Confirmation Popup: shows order number, cart empties only when this is closed -->
+    <div id="orderConfirmModal" class="dream-contact-modal-overlay" onclick="if(event.target===this) closeOrderConfirm();">
+        <div class="dream-cart-window-card" style="text-align:center; max-width:500px; background:linear-gradient(135deg, #fff7fa 0%, #ffe4ec 100%); border:2px solid #f9a8d4; border-radius:20px; box-shadow:0 12px 30px rgba(236,28,122,0.25); padding:32px 24px;">
+            <h4 style="font-size:24px; color:#4A2E2B; margin-bottom:12px;">✅ Order Placed!</h4>
+            <p style="font-size:17px; color:#4A2E2B;">Your order has been placed and this is your order number:</p>
+            <div id="orderConfirmNumber" style="font-size:30px; font-weight:800; color:#ec1c7a; margin:16px 0; word-break:break-all;">DD-00000000-0000</div>
+            <p style="font-size:16px; color:#4A2E2B; line-height:1.5;">Please save this order number somewhere and keep it with you. 💗<br>We will reply to confirm your order.</p>
+            <button type="button" class="dream-modal-action-btn" style="background:#ec1c7a; color:#fff; width:100%; margin-top:16px; padding:14px; font-size:17px; border-radius:30px; border:none; cursor:pointer;" onclick="closeOrderConfirm();">Done</button>
+        </div>
+    </div>
+    <script>
+        function openOrderConfirm(orderNumber) {
+            closeOtherModals('orderConfirmModal');
+            document.getElementById('orderConfirmNumber').innerText = orderNumber;
+            document.getElementById('orderConfirmModal').classList.add('contact-modal-active');
+            lockPageScroll();
+        }
+        function closeOrderConfirm() {
+            document.getElementById('orderConfirmModal').classList.remove('contact-modal-active');
+            unlockPageScroll();
+            // Only NOW, when the confirmation window is closed, empty the cart
+            clearCartState();
+        }
+    </script>
 
 </body>
 </html>

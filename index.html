@@ -539,7 +539,7 @@ function orderNumber() {
 // GOOGLE SHEETS DATABASE — paste your Apps Script Web App URL here.
 // Example: var SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/XXXX/exec';
 // Leave it empty until then — the email order still works, and no sheet save is attempted.
-var SHEETS_WEB_APP_URL = '';
+var SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzORVej0bLY_dditOHYOOjmjxVj129pCnMv3Z2X-m2Bhns3oQbNVFZg1Inw0RgxkF9Tew/exec';
 function saveOrderToSheet(data) {
   if (!SHEETS_WEB_APP_URL || SHEETS_WEB_APP_URL.indexOf('https://') !== 0) return;
   try {

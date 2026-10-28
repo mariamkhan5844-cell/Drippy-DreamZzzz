@@ -267,7 +267,7 @@
       <a href="#cake"><img src="https://drippydreamzzz.com/cakepops.jpeg" alt="Cake Popsicles"><span>🧁 Cake Popsicles • From $24/12</span></a>
       <a href="#oreos"><img src="https://drippydreamzzz.com/oreo.jpeg" alt="Chocolate Covered Oreos"><span>🍪 Oreos • $20/dozen</span></a>
       <a href="#pretzels"><img src="https://drippydreamzzz.com/pretzels.jpeg" alt="Chocolate Pretzels"><span>🥨 Pretzels • From $24/12</span></a>
-      <a href="#rice"><img src="rice-krispies.jpeg" alt="Rice Krispies Treats"><span>🍫 Rice Krispies • Tiers from $24</span></a>
+      <a href="#rice"><img src="rice-krispies.jpg" alt="Rice Krispies Treats"><span>🍫 Rice Krispies • Tiers from $24</span></a>
       <a href="#strawberries"><div class="grid-emoji">🍓</div><span>🍓 Strawberries • $24/dozen</span></a>
     </div>
   </section>
@@ -317,7 +317,7 @@
 
   <!-- 4. RICE KRISPIES -->
   <section class="treat" id="rice">
-    <img src="rice-krispies.jpeg" alt="Rice Krispies Treats">
+    <img src="rice-krispies.jpg" alt="Rice Krispies Treats">
     <div>
       <h2>Rice Krispies Treats</h2><p class="desc">Soft, chewy Rice Krispies bars, dipped in chocolate and decorated to your theme.</p><div class="tiers"><span>12 — $24</span><span>24 — $48</span><span>36 — $60</span><span>48 — $90</span><span>96 — $150</span><span>Over 96 — $200</span></div><p class="price-note">Note: Prices may vary — if your design is a little difficult or complicated, we will tell you the price by email. Once you confirm, then we will start preparing your order. If we cannot make your design, or it is too difficult, we will tell you that we cannot make this design right now.</p>
       <div class="field"><label>Quantity <small>(minimum 12)</small></label><input type="number" id="riceQty" value="12" min="12"></div>
@@ -423,6 +423,7 @@
     <h3>⚠️ Before You Add to Your Order</h3>
     <p style="margin-top:14px;">Please note: Prices may vary — if your theme or design is a little difficult or complicated, the price may be different from the price shown.</p>
     <p style="margin-top:10px;">We will send you the final price by email. Once you confirm it, then we will start preparing your order.</p>
+    <p style="margin-top:10px;"><strong>Payment — please read carefully:</strong> To confirm your order, a <strong>60% deposit</strong> is required first. The remaining balance must be paid <strong>in full one day before your order day</strong>. Whether your order is for pickup or delivery, it will be ready / delivered on your order day only after full payment is received one day before.</p>
     <p style="margin-top:10px;">If we cannot make your design, or it is too difficult, we will tell you honestly that we cannot make this design right now.</p>
     <button class="btn" onclick="confirmPriceDisclaimer()" style="display:block; width:100%; margin-top:20px;">I Understand — Add to My Order</button>
     <button class="btn btn-outline" onclick="closePriceDisclaimer()" style="display:block; width:100%; margin-top:10px;">Go Back</button>
@@ -608,6 +609,9 @@ function closeConfirm() {
   var res = document.getElementById('addrResult'); if (res) { res.className = 'addr-result'; res.innerText = ''; }
   var sug = document.getElementById('addrSuggestions'); if (sug) { sug.classList.remove('open'); sug.innerHTML = ''; }
   setDelivery('pickup');
+  // Return the customer to the top / Home section, so they do not have to
+  // scroll up manually from Checkout after their order is placed.
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ---- Address picker + 5-mile distance check ----

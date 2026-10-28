@@ -597,6 +597,17 @@ function sendOrder() {
 function closeConfirm() {
   document.getElementById('confirmModal').classList.remove('open');
   order = []; renderOrder();
+  // Clear the customer's information after a successful order, so the next
+  // customer does not see the previous customer's details and no page
+  // refresh is needed. This runs only here, after a successful send — if
+  // sending fails, the confirmation never opens, so nothing is cleared
+  // and the customer can retry with their details still filled in.
+  ['custName', 'custEmail', 'custAddress', 'custPhone', 'custDate', 'custAllergy', 'custLat', 'custLon', 'custDistanceMiles'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.value = '';
+  });
+  var res = document.getElementById('addrResult'); if (res) { res.className = 'addr-result'; res.innerText = ''; }
+  var sug = document.getElementById('addrSuggestions'); if (sug) { sug.classList.remove('open'); sug.innerHTML = ''; }
+  setDelivery('pickup');
 }
 
 // ---- Address picker + 5-mile distance check ----

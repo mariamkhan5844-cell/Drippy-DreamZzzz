@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Drippy DreamZzzz — Aesthetic Easy Ordering</title>
+<title>Drippy DreamZzzz — Photo-First Grid</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -178,6 +178,20 @@
   @media (max-width: 600px) {
     .hero h1 { font-size: 36px; }
   }
+
+  .share-bar { background: #fff; border: 2px dashed #f9a8d4; border-radius: 20px; padding: 20px; margin: 24px 0; text-align: center; }
+  .share-bar h3 { font-size: 22px; margin-bottom: 8px; }
+  .share-bar p { color: #6b5560; margin-bottom: 14px; }
+  .share-btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .share-btns a, .share-btns button { padding: 12px 20px; border-radius: 999px; font-weight: 800; font-size: 15px; border: 2px solid #f9a8d4; background: #fff; cursor: pointer; color: #9d174d; }
+
+  .photo-grid { margin: 24px 0; }
+  .photo-grid .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .photo-grid .grid a { background: #fff; border-radius: 20px; overflow: hidden; border: 1px solid #f5dbe3; box-shadow: 0 10px 24px rgba(43,26,18,0.08); text-align: center; font-weight: 800; font-size: 14px; padding-bottom: 12px; }
+  .photo-grid .grid a:last-child { grid-column: 1 / -1; }
+  .photo-grid img { width: 100%; height: 160px; object-fit: cover; display: block; margin-bottom: 10px; }
+  .photo-grid .grid-emoji { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 72px; background: linear-gradient(135deg, #ffe4ec, #ffd9e8); margin-bottom: 10px; }
+  .photo-grid span { display: block; padding: 0 8px; }
 </style>
 </head>
 <body>
@@ -203,7 +217,7 @@
 <header>
   <a class="logo" href="#top" title="Go to the top of the Home Page"><img src="https://drippydreamzzz.com/logo.png" alt="Drippy DreamZzzz"> Drippy DreamZzzz</a>
   <div class="tagline">Baked With Love • Chicago &amp; Suburbs Only</div>
-  <nav class="navlinks"><a href="#top"><span class="nav-icon">🏠</span>Home</a><a href="#cake"><span class="nav-icon">🧁</span>Cake Pops</a><a href="#oreos"><span class="nav-icon">🍪</span>Oreos</a><a href="#pretzels"><span class="nav-icon">🥨</span>Pretzels</a><a href="#rice"><span class="nav-icon">🧱</span>Rice Krispies</a><a href="#strawberries"><span class="nav-icon">🍓</span>Strawberries</a><a href="#about"><span class="nav-icon">💗</span>About Us</a><a href="#video"><span class="nav-icon">🎬</span>Video</a><a href="#reviews"><span class="nav-icon">💬</span>Reviews</a><a href="#checkout"><span class="nav-icon">🧾</span>My Order (<span id="cartCount">0</span>)</a></nav>
+  <nav class="navlinks"><a href="#top"><span class="nav-icon">🏠</span>Home</a><a href="#cake"><span class="nav-icon">🧁</span>Cake Pops</a><a href="#oreos"><span class="nav-icon">🍪</span>Oreos</a><a href="#pretzels"><span class="nav-icon">🥨</span>Pretzels</a><a href="#rice"><span class="nav-icon">🍫</span>Rice Krispies</a><a href="#strawberries"><span class="nav-icon">🍓</span>Strawberries</a><a href="#about"><span class="nav-icon">💗</span>About Us</a><a href="#reviews"><span class="nav-icon">💬</span>Reviews</a><a href="#checkout"><span class="nav-icon">🧾</span>My Order (<span id="cartCount">0</span>)</a></nav>
 </header>
 
 <div class="wrap">
@@ -228,9 +242,32 @@
     <a href="#cake">🧁 Cake Popsicles</a>
     <a href="#oreos">🍪 Oreos</a>
     <a href="#pretzels">🥨 Pretzels</a>
-    <a href="#rice">🧱 Rice Krispies</a>
+    <a href="#rice">🍫 Rice Krispies</a>
     <a href="#strawberries">🍓 Strawberries</a>
   </div>
+
+
+  <section class="share-bar">
+    <h3>💌 Loved it? Share with Friends!</h3>
+    <p>Send Drippy Dreams to a friend — they can order in 3 easy steps too.</p>
+    <div class="share-btns">
+      <a href="https://wa.me/?text=Check%20out%20Drippy%20DreamZzzz%20-%20chocolate-dipped%20treats%20made%20with%20love%20in%20Chicago!%20https%3A%2F%2Fdrippydreamzzz.com" target="_blank" rel="noopener">💬 Share on WhatsApp</a>
+      <button type="button" onclick="copySiteLink()">🔗 Copy Website Link</button>
+      <a href="https://instagram.com/drippydreamzzz" target="_blank" rel="noopener">📸 Instagram @drippydreamzzz</a>
+    </div>
+  </section>
+
+
+  <section class="photo-grid">
+    <h2 style="text-align:center; margin-bottom:16px;">Tap a Photo to Order 🍫</h2>
+    <div class="grid">
+      <a href="#cake"><img src="https://drippydreamzzz.com/cakepops.jpeg" alt="Cake Popsicles"><span>🧁 Cake Popsicles • From $24/12</span></a>
+      <a href="#oreos"><img src="https://drippydreamzzz.com/oreo.jpeg" alt="Chocolate Covered Oreos"><span>🍪 Oreos • $20/dozen</span></a>
+      <a href="#pretzels"><img src="https://drippydreamzzz.com/pretzels.jpeg" alt="Chocolate Pretzels"><span>🥨 Pretzels • From $24/12</span></a>
+      <a href="#rice"><img src="rice-krispies.jpg" alt="Rice Krispies Treats"><span>🍫 Rice Krispies • Tiers from $24</span></a>
+      <a href="#strawberries"><div class="grid-emoji">🍓</div><span>🍓 Strawberries • $24/dozen</span></a>
+    </div>
+  </section>
 
   <!-- 1. CAKE POPSICLES -->
   <section class="treat" id="cake">
@@ -277,7 +314,7 @@
 
   <!-- 4. RICE KRISPIES -->
   <section class="treat" id="rice">
-    <div class="emoji-img">🧱</div>
+    <img src="rice-krispies.jpg" alt="Rice Krispies Treats">
     <div>
       <h2>Rice Krispies Treats</h2><p class="desc">Soft, chewy Rice Krispies bars, dipped in chocolate and decorated to your theme.</p><div class="tiers"><span>12 — $24</span><span>24 — $48</span><span>36 — $60</span><span>48 — $90</span><span>96 — $150</span><span>Over 96 — $200</span></div><p class="price-note">Note: Prices may vary — if your design is a little difficult or complicated, we will tell you the price by email. Once you confirm, then we will start preparing your order. If we cannot make your design, or it is too difficult, we will tell you that we cannot make this design right now.</p>
       <div class="field"><label>Quantity <small>(minimum 12)</small></label><input type="number" id="riceQty" value="12" min="12"></div>
@@ -312,14 +349,6 @@
     </p>
   </section>
 
-  <!-- VIDEO -->
-  <section class="treat" id="video" style="text-align:center;">
-    <h2>🎬 Watch How We Make Them</h2>
-    <p class="desc" style="text-align:center;">Mini Vlog — A day in my life. Watch our Cake Popsicles being dipped in white chocolate and decorated with red, white &amp; blue stars.</p>
-    <video src="drippy-mini-vlog-muted.mp4" controls muted loop playsinline preload="metadata" style="width:100%; max-width:360px; height:auto; border-radius:20px; display:block; margin:0 auto; background:#000;"></video>
-    <p style="margin-top:16px;"><a href="https://www.tiktok.com/@drippy.dreamzzz" target="_blank" rel="noopener">🎵 See more on TikTok @drippy.dreamzzz</a></p>
-    <p style="font-size:13px; color:#6b5560; margin-top:8px;">Video plays without sound. To show it on the live site, upload drippy-mini-vlog-muted.mp4 to the same repo folder as index.html.</p>
-  </section>
 
   <!-- CUSTOMER REVIEWS - placeholders only: replace with real customer reviews when Ertiza provides them -->
   <section class="treat" id="reviews" style="text-align:center;">
@@ -382,7 +411,7 @@
 <footer>
   <h3 style="color:#fff; margin-bottom:4px;">Drippy DreamZzzz</h3>
   <div class="foot-row"><span>Baked With Love</span><span class="dot">•</span><span>Chicago &amp; Suburbs Only</span><span class="dot">•</span><span>Pickup Free</span></div>
-  <div class="foot-row"><span>Instagram: <a href="https://instagram.com/drippydreamzzz">@drippydreamzzz</a></span><span class="dot">•</span><span>TikTok: <a href="https://www.tiktok.com/@drippy.dreamzzz">@drippy.dreamzzz</a></span><span class="dot">•</span><span>Email: <a href="mailto:ertyriaz716@gmail.com">ertyriaz716@gmail.com</a></span></div>
+  <div class="foot-row"><span>Instagram: <a href="https://instagram.com/drippydreamzzz">@drippydreamzzz</a></span><span class="dot">•</span><span>TikTok: <a href="https://www.tiktok.com/@drippy.dreamzzz">@drippy.dreamzzz</a></span><span class="dot">•</span><span>Email: <a href="mailto:drippydreamz26@gmail.com">drippydreamz26@gmail.com</a></span></div>
   <div class="foot-row"><a href="https://drippydreamzzz.com/privacy.html">Privacy Policy</a><span class="dot">•</span><a href="https://drippydreamzzz.com/terms.html">Terms</a><span class="dot">•</span><a href="https://drippydreamzzz.com/cookies.html">Cookies</a></div>
 </footer>
 
@@ -503,6 +532,22 @@ function orderNumber() {
   var d = new Date();
   return 'DD-' + d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + '-' + String(Math.floor(1000 + Math.random() * 9000));
 }
+
+// GOOGLE SHEETS DATABASE — paste your Apps Script Web App URL here.
+// Example: var SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/XXXX/exec';
+// Leave it empty until then — the email order still works, and no sheet save is attempted.
+var SHEETS_WEB_APP_URL = '';
+function saveOrderToSheet(data) {
+  if (!SHEETS_WEB_APP_URL || SHEETS_WEB_APP_URL.indexOf('https://') !== 0) return;
+  try {
+    fetch(SHEETS_WEB_APP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(data)
+    }).catch(function() {});
+  } catch (e) {}
+}
 function sendOrder() {
   if (!order.length) { alert('Your order is empty. Please add a treat first.'); return; }
   var name = document.getElementById('custName').value.trim();
@@ -523,7 +568,21 @@ function sendOrder() {
   var sub = 0;
   order.forEach(function(it) { lines.push(it.label + ' x ' + it.qty + (it.detail ? ' — ' + it.detail : '') + ' — $' + it.price.toFixed(2)); sub += it.price; });
   lines.push('', 'Total: $' + (sub + deliveryFee()).toFixed(2));
-  fetch('https://formsubmit.co/ajax/ertyriaz716@gmail.com', {
+  saveOrderToSheet({
+    date: new Date().toISOString(),
+    order_number: num,
+    name: name,
+    email: email,
+    phone: phone || '',
+    items: order.map(function(it) { return it.label + ' x ' + it.qty + (it.detail ? ' — ' + it.detail : '') + ' — $' + it.price.toFixed(2); }).join('; '),
+    total: (sub + deliveryFee()).toFixed(2),
+    delivery: (del === 'delivery' ? 'Delivery, ' + deliveryTierText(parseFloat(distMiles)) : 'Pickup') + ' ($' + deliveryFee().toFixed(2) + ')',
+    address: addr || 'Pickup',
+    distance: distMiles || '',
+    allergies: allergy || '',
+    needed: dateVal || ''
+  });
+  fetch('https://formsubmit.co/ajax/drippydreamz26@gmail.com', {
     method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify({ name: name, email: email, order: lines.join('\n'), order_number: num, _subject: 'New Order ' + num + ' - Drippy DreamZzzz', _captcha: 'false', _template: 'table' })
   }).then(function(r) {
@@ -693,6 +752,13 @@ function setDelivery(v) {
   document.getElementById('dmPickupBtn').classList.toggle('selected', v === 'pickup');
   document.getElementById('dmDeliveryBtn').classList.toggle('selected', v === 'delivery');
   renderOrder();
+}
+
+function copySiteLink() {
+  var link = 'https://drippydreamzzz.com';
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(link).then(function(){ alert('Link copied! Now paste it to a friend.'); }).catch(function(){ alert('Website link: ' + link); });
+  } else { alert('Website link: ' + link); }
 }
 </script>
 </body>

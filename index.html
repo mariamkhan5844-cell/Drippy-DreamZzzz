@@ -199,7 +199,7 @@
 </style>
 </head>
 <body>
-  <!-- WELCOME POPUP: shows every time the site opens -->
+  <!-- WELCOME POPUP: shows only once per visit -- once closed, it stays closed when you return Home -->
   <div class="welcome-overlay" id="welcomePopup" role="dialog" aria-label="Welcome to Drippy Dreams">
     <span class="welcome-confetti" style="left:8%; animation-delay:0s;">🍫</span>
     <span class="welcome-confetti" style="left:22%; animation-delay:1s;">🍬</span>
@@ -740,11 +740,19 @@ function closeWelcome() {
   var w = document.getElementById('welcomePopup');
   if (w) w.classList.add('hidden');
   document.body.style.overflow = '';
+  try { sessionStorage.setItem('drippyWelcomeSeen', '1'); } catch (e) {}
 }
 document.addEventListener('DOMContentLoaded', function() {
-  document.body.style.overflow = 'hidden';
+  var seen = false;
+  try { seen = sessionStorage.getItem('drippyWelcomeSeen') === '1'; } catch (e) {}
   var w = document.getElementById('welcomePopup');
-  if (w) w.classList.remove('hidden');
+  if (seen) {
+    if (w) w.classList.add('hidden');
+    document.body.style.overflow = '';
+  } else {
+    document.body.style.overflow = 'hidden';
+    if (w) w.classList.remove('hidden');
+  }
 });
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeWelcome();

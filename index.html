@@ -198,9 +198,27 @@
   .photo-grid img { width: 100%; height: 160px; object-fit: cover; display: block; margin-bottom: 10px; }
   .photo-grid .grid-emoji { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 72px; background: linear-gradient(135deg, #ffe4ec, #ffd9e8); margin-bottom: 10px; }
   .photo-grid span { display: block; padding: 0 8px; }
+
+  .live-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  .live-bg img { position: absolute; width: 52px; height: 52px; border-radius: 50%; object-fit: cover; opacity: 0.45; animation: liveFloat 14s ease-in-out infinite; }
+  @keyframes liveFloat { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-26px) rotate(4deg); } }
+  header, section, footer { position: relative; z-index: 1; }
 </style>
 </head>
 <body>
+
+<div class="live-bg" aria-hidden="true">
+  <img src="rice-krispies.jpeg" alt="" style="left:4%; top:12%; animation-delay:0s;">
+  <img src="strawberries.jpg" alt="" style="left:88%; top:18%; animation-delay:2s; animation-duration:16s;">
+  <img src="cakepops.jpeg" alt="" style="left:12%; top:55%; animation-delay:4s; animation-duration:18s;">
+  <img src="rice-krispies.jpeg" alt="" style="left:82%; top:62%; animation-delay:1s; animation-duration:15s;">
+  <img src="strawberries.jpg" alt="" style="left:45%; top:8%; animation-delay:3s; animation-duration:17s;">
+  <img src="cakepops.jpeg" alt="" style="left:68%; top:40%; animation-delay:5s; animation-duration:13s;">
+  <img src="rice-krispies.jpeg" alt="" style="left:28%; top:82%; animation-delay:2.5s; animation-duration:16s;">
+  <img src="strawberries.jpg" alt="" style="left:55%; top:88%; animation-delay:0.5s; animation-duration:14s;">
+  <img src="cakepops.jpeg" alt="" style="left:92%; top:85%; animation-delay:3.5s; animation-duration:18s;">
+</div>
+
   <!-- WELCOME POPUP: shows only once per visit -- once closed, it stays closed when you return Home -->
   <div class="welcome-overlay" id="welcomePopup" role="dialog" aria-label="Welcome to Drippy Dreams">
     <span class="welcome-confetti" style="left:8%; animation-delay:0s;">🍫</span>

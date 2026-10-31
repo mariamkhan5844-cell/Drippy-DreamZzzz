@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service | Drippy DreamZzzz Premium Treats</title>
+<link rel="canonical" href="https://drippydreamzzz.com/terms/">
+    <style>
+        /* --- RIGID BRAND COLOR PARADIGM --- */
+        :root {
+            --color-white: #FFFFFF;
+            --color-blue-primary: #1E3A8A;   /* Deep Professional Baking Blue */
+            --color-blue-light: #EFF6FF;     /* Clean Soft Ice Blue Accent */
+            --color-brown-dark: #4A2E2B;     /* Rich Chocolate Brown */
+            --color-brown-text: #2B1614;     /* Deep Espresso Font Face */
+            --color-border-tint: #E2E8F0;    /* Muted Slate Dividing Line */
+        }
+
+        /* --- GLOBAL RESETS --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #F8FAFC; 
+            color: var(--color-brown-text);
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        ul { list-style: none; }
+
+        /* --- TRANSLUCENT FLOATING MOUSE HOVER BUBBLE TOOLTIP --- */
+        #cursorBakingTooltip {
+            position: fixed;
+            pointer-events: none;
+            background-color: rgba(30, 58, 138, 0.94); 
+            color: var(--color-white);
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 20px;
+            z-index: 9999;
+            display: none; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            white-space: nowrap;
+            transition: opacity 0.15s ease;
+            transform: translate(15px, 15px); 
+        }
+
+        /* --- ACCELERATED INTELLIGENT COMPACT SCROLLING HEADER --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 4px solid var(--color-blue-primary);
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.85);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
+            transform: translateY(0);
+            animation: headerShadowPulse 4s ease-in-out infinite alternate;
+        }
+
+        header.header-hidden {
+            transform: translateY(-100%);
+            box-shadow: none;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)), 
+                        url('https://unsplash.com') repeat-x linear;
+            background-size: contain;
+            animation: moveBakingBg 45s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes moveBakingBg {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
+        }
+
+        #headerParticles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bakery-particle {
+            position: absolute;
+            font-size: 16px;
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.8;
+            will-change: transform, opacity;
+            animation: fallAndSpin 6s linear forwards;
+        }
+
+        @keyframes fallAndSpin {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(140px) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes headerShadowPulse {
+            0% { box-shadow: 0 4px 10px rgba(30, 58, 138, 0.06); }
+            100% { box-shadow: 0 8px 25px rgba(30, 58, 138, 0.15); border-bottom-color: #3B82F6; }
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px 25px; /* Proportional slim vertical padding configuration */
+            position: relative;
+            z-index: 2;
+        }
+
+        .site-logo {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.94);
+            padding: 5px 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+        }
+
+        .site-logo img { height: 50px; width: auto; display: block; }
+
+        .nav-links-list {
+            display: flex;
+            gap: 20px;
+            font-weight: 700;
+            font-size: 15px;
+            background: rgba(255, 255, 255, 0.94);
+            padding: 8px 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+        }
+
+        .nav-links-list li { position: relative; }
+        .nav-links-list a { color: var(--color-brown-dark); position: relative; }
+        .nav-links-list a:hover { color: var(--color-blue-primary); }
+        /* --- EYE-CATCHING CUSTOM MODAL BASKET THEME --- */
+        .dream-cart-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(43, 22, 20, 0.6); 
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .dream-cart-modal-overlay.modal-active {
+            opacity: 1; pointer-events: auto;
+        }
+
+        .dream-cart-window-card {
+            background-color: var(--color-white);
+            border-top: 6px solid var(--color-blue-primary);
+            border-bottom: 6px solid var(--color-brown-dark);
+            border-radius: 16px;
+            width: 90%; max-width: 500px;
+            padding: 35px;
+            box-shadow: 0 20px 25px -5px rgba(30, 58, 138, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: scale(0.85) translateY(30px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .dream-cart-modal-overlay.modal-active .dream-cart-window-card {
+            transform: scale(1) translateY(0);
+        }
+        .dream-modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--color-blue-light);
+            padding-bottom: 15px; margin-bottom: 20px;
+        }
+        .dream-modal-header h4 { font-size: 20px; color: var(--color-blue-primary); font-weight: 800; letter-spacing: -0.5px; }
+        .dream-modal-close-trigger {
+            background: var(--color-blue-light); border: none; color: var(--color-blue-primary);
+            font-size: 18px; font-weight: 800; cursor: pointer; width: 32px; height: 32px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .dream-modal-close-trigger:hover { background-color: var(--color-brown-dark); color: var(--color-white); }
+        .dream-modal-stream-body { max-height: 350px; overflow-y: auto; padding-right: 5px; }
+        .cart-item-receipt-row {
+            background-color: var(--color-blue-light); border-left: 4px solid var(--color-blue-primary);
+            padding: 12px 16px; border-radius: 0 8px 8px 0; margin-bottom: 15px;
+        }
+        .cart-item-receipt-row h6 { font-size: 14px; font-weight: 700; color: var(--color-brown-dark); }
+        .cart-item-receipt-row p { font-size: 12px; color: #555; font-style: italic; margin-top: 2px; }
+        .dream-modal-footer {
+            border-top: 2px solid var(--color-blue-light); padding-top: 15px; margin-top: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .dream-modal-footer-summary span { font-size: 11px; text-transform: uppercase; font-weight: 800; color: #666; display: block; }
+        .dream-modal-footer-summary strong { font-size: 24px; color: var(--color-blue-primary); font-weight: 900; }
+        .dream-modal-action-btn { background-color: var(--color-blue-primary); color: var(--color-white); border: none; padding: 12px 24px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: background 0.2s ease; }
+        .dream-modal-action-btn:hover { background-color: var(--color-brown-dark); }
+
+        /* --- BRANDED CONTACT OVERLAY DIALOG THEME --- */
+        .dream-contact-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(43, 22, 20, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 10001;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .dream-contact-modal-overlay.contact-modal-active {
+            opacity: 1; pointer-events: auto;
+        }
+        .contact-required-asterisk {
+            color: #EF4444;
+            font-weight: 800;
+            margin-left: 3px;
+        }
+        .contact-field-required-msg {
+            color: #EF4444;
+            font-size: 11px;
+            font-weight: 700;
+            display: none;
+            margin-top: 2px;
+        }
+
+        /* --- TERMS SHEET LAYOUT BLOCKS --- */
+        .policy-main-hero {
+            margin-top: 79px !important; /* Proportional slim alignment shift match */
+            background: linear-gradient(135deg, var(--color-blue-primary) 0%, var(--color-brown-dark) 100%);
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--color-white);
+            border-bottom: 5px solid var(--color-brown-dark);
+        }
+
+        .policy-hero-inner { max-width: 800px; margin: 0 auto; }
+        .policy-hero-inner h1 { font-size: 36px; font-weight: 800; letter-spacing: -0.5px; }
+        .policy-hero-inner p { color: var(--color-blue-light); margin-top: 10px; font-size: 15px; }
+
+        .policy-content-card {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: var(--color-white);
+            border: 1px solid var(--color-border-tint);
+            border-radius: 12px;
+            padding: 50px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
+        }
+
+        .policy-content-card h2 { font-size: 20px; color: var(--color-blue-primary); font-weight: 800; margin-top: 30px; margin-bottom: 12px; border-bottom: 2px solid var(--color-blue-light); padding-bottom: 6px; }
+        .policy-content-card p { font-size: 15px; margin-bottom: 20px; color: #334155; }
+        /* --- CENTERED FOOTER SYSTEM BRAND ARCHITECTURE --- */
+        footer { 
+            background-color: var(--color-brown-dark); 
+            color: var(--color-white); 
+            padding: 50px 20px 40px; 
+            margin-top: 80px; 
+            border-top: 5px solid var(--color-blue-primary); 
+        }
+        
+        .footer-bounded-box { max-width: 1200px; margin: 0 auto; text-align: center; }
+        
+        .footer-logo-wrap { 
+            display: block; 
+            width: fit-content; 
+            margin: 0 auto 25px auto; 
+            background-color: var(--color-white); 
+            padding: 8px 18px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+            line-height: 0; 
+        }
+        
+        .footer-logo-wrap img { 
+            height: 45px; 
+            width: auto; 
+            display: block; 
+        }
+        
+        .footer-legal-links { display: flex; justify-content: center; gap: 40px; margin-bottom: 35px; font-size: 14px; font-weight: 700; flex-wrap: wrap; }
+        .footer-legal-links a { color: var(--color-blue-light); }
+        .footer-legal-links a:hover { color: var(--color-white); text-decoration: underline; }
+        .footer-copyright-row { font-size: 13px; color: var(--color-blue-light); border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 25px; margin-top: 25px; }
+
+        @media (max-width: 768px) {
+            .header-container { flex-direction: column; gap: 20px; padding: 15px; }
+            .site-logo img { height: 75px; }
+            .nav-links-list { gap: 20px; flex-wrap: wrap; justify-content: center; padding: 10px 15px; }
+            .policy-content-card { padding: 30px 20px; margin: 30px 15px; }
+            .policy-hero-inner h1 { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+<!-- ... (This is the end of your closing </head> and </style> sections) ... -->
+</head>
+<body>
+
+    <!-- 📍 THIS IS THE EXACT PLACE TO PASTE STEP 2: -->
+    <!-- Branded Custom Contact Administration Dialog Box Frame -->
+     <!-- Branded Custom Contact Administration Dialog Box Frame -->
+    <div id="dreamContactModal" class="dream-contact-modal-overlay" onclick="if(event.target===this) closeBrandedContactBox();">
+        <div class="dream-cart-window-card">
+            <div class="dream-modal-header">
+                <h4>📬 Contact Administration Desk</h4>
+                <button type="button" class="dream-modal-close-trigger" onclick="closeBrandedContactBox()">&times;</button>
+            </div>
+            <form id="adminDirectContactForm" onsubmit="event.preventDefault(); transmitContactInquiryEmail();">
+                <div class="input-group-wrapper" style="margin-bottom:15px; display:flex; flex-direction:column; gap:8px;">
+                    <label style="font-size:14px; font-weight:700; color:var(--color-brown-dark); text-transform:uppercase;">Your Name<span class="contact-required-asterisk">*</span></label>
+                    <input type="text" id="contactAuthName" class="form-field-input" placeholder="Sarah Jenkins" required>
+                    <span class="contact-field-required-msg">Field required with *</span>
+                </div>
+                <div class="input-group-wrapper" style="margin-bottom:15px; display:flex; flex-direction:column; gap:8px;">
+                    <label style="font-size:14px; font-weight:700; color:var(--color-brown-dark); text-transform:uppercase;">Email Address<span class="contact-required-asterisk">*</span></label>
+                    <input type="email" id="contactAuthEmail" class="form-field-input" placeholder="sarah@example.com" required>
+                    <span class="contact-field-required-msg">Field required with *</span>
+                </div>
+                <div class="input-group-wrapper" style="margin-bottom:15px; display:flex; flex-direction:column; gap:8px;">
+                    <label style="font-size:14px; font-weight:700; color:var(--color-brown-dark); text-transform:uppercase;">Phone Number<span class="contact-required-asterisk">*</span></label>
+                    <input type="tel" id="contactAuthPhone" class="form-field-input" placeholder="(555) 000-0000" required>
+                    <span class="contact-field-required-msg">Field required with *</span>
+                </div>
+                <div class="input-group-wrapper" style="margin-bottom:20px; display:flex; flex-direction:column; gap:8px;">
+                    <label style="font-size:14px; font-weight:700; color:var(--color-brown-dark); text-transform:uppercase;">Message / Inquiry Query<span class="contact-required-asterisk">*</span></label>
+                    <textarea id="contactAuthQuery" class="form-field-input" rows="4" placeholder="Type your administration or billing query here..." required></textarea>
+                    <span class="contact-field-required-msg">Field required with *</span>
+                </div>
+                <button type="submit" class="form-submit-trigger" style="padding:12px; width:100%;">Transmit Message Request</button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Transparent glass floating cursor bubble element (Already existing below the body tag) -->
+    <div id="cursorBakingTooltip">Baking Rule: Minimum of 12 required to order. 🧁</div>
+
+
+    <!-- Transparent glass floating cursor bubble element managed by mouse follow trackers -->
+    <div id="cursorBakingTooltip">Baking Rule: Minimum of 12 required to order. 🧁</div>
+
+    <!-- Eye-Catching Custom Cart Window Overlay Panel -->
+    <div id="dreamCartModal" class="dream-cart-modal-overlay" onclick="if(event.target===this) closeBeautifulCartSummary();">
+        <div class="dream-cart-window-card">
+            <div class="dream-modal-header">
+                <h4>✨ Your Drippy DreamZzzz Cart</h4>
+                <button type="button" class="dream-modal-close-trigger" onclick="closeBeautifulCartSummary()">&times;</button>
+            </div>
+            <div id="dreamModalBodyContainer" class="dream-modal-stream-body">
+                <!-- Basket state descriptions inject smoothly right here -->
+            </div>
+            <div class="dream-modal-footer">
+                <div class="dream-modal-footer-summary">
+                    <span>Estimated Total</span>
+                    <strong id="modalSummaryPriceText">$0.00</strong>
+                </div>
+                <button type="button" class="dream-modal-action-btn" onclick="closeBeautifulCartSummary(); window.location.href='/#checkout';">Verify Order</button>
+            </div>
+        </div>
+    </div>
+    <!-- Branded Custom Contact Administration Dialog Box Frame -->
+    <div id="dreamContactModal" class="dream-contact-modal-overlay" onclick="if(event.target===this) closeBrandedContactBox();">
+        <div class="dream-cart-window-card" style="max-width: 450px;">
+            <div class="dream-modal-header">
+                <h4>📬 Contact Administration Desk</h4>
+                <button type="button" class="dream-modal-close-trigger" onclick="closeBrandedContactBox()">&times;</button>
+            </div>
+            <form id="adminDirectContactForm" onsubmit="event.preventDefault(); transmitContactInquiryEmail();">
+                <div class="input-group-wrapper" style="margin-bottom:15px;">
+                    <label>Your Name<span class="contact-required-asterisk">*</span></label>
+                    <input type="text" id="contactAuthName" class="form-field-input" placeholder="Sarah Jenkins" required>
+                    <span class="contact-field-required-msg">Field required with *</span>
+                </div>
+                <div class="input-group-wrapper" style="margin-bottom:15px;">
+                    <label>Email Address<span class="contact-required-asterisk">*</span></label>
+                    <input type="email" id="contactAuthEmail" class="form-field-input" placeholder="sarah@example.com" required>
+                    <span class="contact-field-required-msg">Field required with *</span>
+                </div>
+                <div class="input-group-wrapper" style="margin-bottom:15px;">
+                    <label>Phone Number<span class="contact-required-asterisk">*</span></label>
+                    <input type="tel" id="contactAuthPhone" class="form-field-input" placeholder="(555) 000-0000" required>
+                    <span class="contact-field-required-msg">Field required with *</span>
+                </div>
+                <div class="input-group-wrapper" style="margin-bottom:20px;">
+                    <label>Message / Inquiry Query<span class="contact-required-asterisk">*</span></label>
+                    <textarea id="contactAuthQuery" class="form-field-input" rows="4" placeholder="Type your administration or billing query here..." required></textarea>
+                    <span class="contact-field-required-msg">Field required with *</span>
+                </div>
+                <button type="submit" class="form-submit-trigger" style="padding:12px;">Transmit Message Request</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SYNCED COMPACT SCROLL NAVIGATION BAR -->
+    <header id="mainHeader">
+        <div id="headerParticles"></div>
+        <div class="header-container">
+            <a href="/" class="site-logo">
+                <img src="logo.png" alt="Drippy DreamZzzz Corporate Badge">
+            </a>
+            <nav>
+                           <nav>
+                <ul class="nav-links-list">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/#orderSection">Custom Orders Hub</a></li>
+                    <li><a href="javascript:void(0)" onclick="openBrandedContactBox()" style="color: var(--color-blue-primary);">📬 Contact Admin</a></li>
+                    <li><a href="javascript:void(0)" onclick="openBeautifulCartSummary()" id="headerCartCountDisplay" style="color: var(--color-blue-primary); font-weight: 800;">🛒 Cart: 0 items</a></li>
+                </ul>
+            </nav>
+
+            </nav>
+        </div>
+    </header>
+    <section class="policy-main-hero">
+        <div class="policy-hero-inner">
+            <h1>Terms of Service</h1>
+            <p>Official baking station rules, event booking clauses, and cancellation timelines.</p>
+        </div>
+    </section>
+
+    <main class="policy-content-card">
+        <p><strong>Last Updated: October 26, 2026</strong></p>
+        <p>Welcome to Drippy DreamZzzz. These Terms of Service govern your commercial interaction, invoice transmission parameters, and basket registration booking protocols using our custom multi-category treat station portals.</p>
+
+        <h2>1. Batch Production Limits & Order Minimums</h2>
+        <p>To preserve manufacturing consistency and raw material calibrations across our commercial baking kitchens, every selected category profile operates under strict minimum order locks. Traditional Cakesicles, Cake Pops, Oreos, Rice Krispies, and Hand-Dipped Strawberries require a strict production floor of 12 items per chosen configuration stream. Gourmet Chocolate Pretzels are permitted to combine rods and loops into customized mixed packages, provided the total combined aggregate sum resolves to a minimum count of 12 pieces or greater. Keystroke and selection inputs below these boundaries cannot be transferred onto production queues.</p>
+
+        <h2>2. Design Theme Validation Guardrails</h2>
+        <p>When selecting our specialized Cakesicles / Cake Pops bundle tier, customers are legally required to declare structural themes and styling colors via our designated input box widget. Order packages generated without transparent design rules or text values dropping below our baseline buffer threshold are automatically blocked by our cart transmission validators until styling profiles are accurately reported.</p>
+        <h2>3. Pro-Rated Pricing & Statement Estimates</h2>
+        <p>Financial evaluations displayed through our live pricing widget tools are pro-rated approximations calculated across our multi-dozen volume matrixes. Hand-Dipped Strawberries calculate pro-rated at a fixed value of $24.00 per dozen. Custom decorated pretzel treatments apply an immediate material fee of $8.00 per dozen. Global packaging selections—including individual wrap heat-sealing treatment assets (+$15.00)—are loaded straight onto total summary statement balances on checkout execution events.</p>
+
+        <h2>4. Booking Confirmations & Deposit Schedules</h2>
+        <p>Transmitting a completed checkout invoice from our store portal registers your production interest framework inside our kitchen logs. It does not secure a guaranteed calendar date block. All custom custom bookings are considered pending until our administrative office completes a physical verification loop via email and processes your mandatory 50% non-refundable scheduling deposit.</p>
+
+        <h2>5. Content Copyright & Ad Unit Integrity</h2>
+        <p>All editorial decoration articles, crumb science documentation matrix columns, and brand asset vectors are the exclusive intellectual property of Drippy DreamZzzz. Users agree not to scrape, hotlink, clone, or disrupt native ad unit blocks running through programmatic publisher platform integration layers.</p>
+    </main>
+    <footer>
+        <div class="footer-bounded-box">
+            <div class="footer-logo-wrap">
+                <img src="logo.png" alt="Drippy DreamZzzz Centered Footer Badge">
+            </div>
+            <nav aria-label="Legal Directory Links">
+                           <nav aria-label="Legal Directory Links">
+                <ul class="footer-legal-links">
+                    <li><a href="/privacy/" onclick="openPolicyPopup('privacy.html', 'Privacy Policy'); return false;">Privacy Policy</a></li>
+                    <li><a href="/terms/" onclick="openPolicyPopup('terms.html', 'Terms of Service'); return false;">Terms of Service</a></li>
+                    <li><a href="/cookies/" onclick="openPolicyPopup('cookies.html', 'Cookie Disclosure Notice'); return false;">Cookie Disclosure Notice</a></li>
+                </ul>
+            </nav>
+
+            </nav>
+            <div class="footer-copyright-row">
+                <p>&copy; 2026 Drippy DreamZzzz. All rights reserved. Content layout engineered to meet AdSense programmatic publisher regulations.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- --- DYNAMIC OVERLAY MODAL LAYERS & TIMERS SCRIPTS --- -->
+       <!-- --- BULLETPROOF SYNCHRONIZED CART & CONTACT INTERACTION LOGIC --- -->
+    <script>
+        const header = document.getElementById('mainHeader');
+        const particleContainer = document.getElementById('headerParticles');
+        const tooltip = document.getElementById('cursorBakingTooltip');
+        let lastScrollY = window.scrollY;
+
+        // Secure state allocation cache block
+        let cartState = {
+            cakePops: { quantity: 0, themeText: "" }, oreos: { quantity: 0 },
+            pretzels: { rodQty: 0, loopQty: 0, decorateStyle: "standard" },
+            riceKrispies: { quantity: 0 }, strawberries: { quantity: 0 }
+        };
+
+        try {
+            const cachedMemory = localStorage.getItem('drippyCartCache');
+            if (cachedMemory) { cartState = JSON.parse(cachedMemory); }
+        } catch (e) {
+            console.log("Memory safety pass activated.");
+        }
+
+        // Safe Scrolling Navigation Track Engine
+        window.addEventListener('scroll', () => {
+            if (!header) return; // Instantly aborts if the header is missing to prevent page freezes
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > lastScrollY && currentScrollY > 150) {
+                header.classList.add('header-hidden');
+            } else if (currentScrollY < lastScrollY || currentScrollY <= 10) {
+                header.classList.remove('header-hidden');
+            }
+            lastScrollY = currentScrollY;
+        });
+
+        // Safe Real-Time Cursor Tracking Engine
+        window.addEventListener('mousemove', (e) => {
+            if (tooltip) {
+                tooltip.style.left = e.clientX + 'px';
+                tooltip.style.top = e.clientY + 'px';
+            }
+        });
+
+        // --- CONTACT POPUP DISPLAY CONTROLLERS ---
+        function openBrandedContactBox() {
+            const contactModal = document.getElementById('dreamContactModal');
+            if (contactModal) {
+                contactModal.classList.add('contact-modal-active');
+            } else {
+                alert("⚠️ Contact Form Error:\n\nThe form container element was not found on this page. Please make sure Step 1's HTML markup is pasted right below your <body> tag.");
+            }
+        }
+
+        function closeBrandedContactBox() {
+            const contactModal = document.getElementById('dreamContactModal');
+            const contactForm = document.getElementById('adminDirectContactForm');
+            if (contactModal) contactModal.classList.remove('contact-modal-active');
+            if (contactForm) contactForm.reset();
+            document.querySelectorAll('.contact-field-required-msg').forEach(msg => msg.style.display = 'none');
+        }
+
+        function transmitContactInquiryEmail() {
+            const name = document.getElementById('contactAuthName').value.trim();
+            const email = document.getElementById('contactAuthEmail').value.trim();
+            const phone = document.getElementById('contactAuthPhone').value.trim();
+            const query = document.getElementById('contactAuthQuery').value.trim();
+            
+            let validationFailed = false;
+
+            if(!name) { document.getElementById('contactAuthName').nextElementSibling.style.display = 'block'; validationFailed = true; }
+            else { document.getElementById('contactAuthName').nextElementSibling.style.display = 'none'; }
+            
+            if(!email) { document.getElementById('contactAuthEmail').nextElementSibling.style.display = 'block'; validationFailed = true; }
+            else { document.getElementById('contactAuthEmail').nextElementSibling.style.display = 'none'; }
+            
+            if(!phone) { document.getElementById('contactAuthPhone').nextElementSibling.style.display = 'block'; validationFailed = true; }
+            else { document.getElementById('contactAuthPhone').nextElementSibling.style.display = 'none'; }
+            
+            if(!query) { document.getElementById('contactAuthQuery').nextElementSibling.style.display = 'block'; validationFailed = true; }
+            else { document.getElementById('contactAuthQuery').nextElementSibling.style.display = 'none'; }
+
+            if (validationFailed) return;
+
+            window.location.href = `mailto:ertyriaz716@://gmail.com{encodeURIComponent("Name: " + name + "\nEmail: " + email + "\nPhone: " + phone + "\n\nQuery: " + query)}`;
+            closeBrandedContactBox();
+        }
+
+        // --- SHOPPING CART ACCORDION OVERLAY GENERATOR ---
+        function openBeautifulCartSummary() {
+            const modalNode = document.getElementById('dreamCartModal');
+            const bodyNode = document.getElementById('dreamModalBodyContainer');
+            if (!modalNode || !bodyNode) return;
+
+            let htmlStream = "", isEmpty = true;
+
+            if (cartState.cakePops.quantity > 0) {
+                htmlStream += `<div class="cart-item-receipt-row"><h6>🧁 Cakesicles / Cake Pops</h6><p>Total Count: ${cartState.cakePops.quantity} pcs<br>Theme: "${cartState.cakePops.themeText}"</p></div>`;
+                isEmpty = false;
+            }
+            if (cartState.oreos.quantity > 0) {
+                htmlStream += `<div class="cart-item-receipt-row"><h6>🍪 Chocolate Covered Oreos</h6><p>Total Count: ${cartState.oreos.quantity} pcs</p></div>`;
+                isEmpty = false;
+            }
+            if (cartState.pretzels.rodQty > 0 || cartState.pretzels.loopQty > 0) {
+                htmlStream += `<div class="cart-item-receipt-row"><h6>🥨 Gourmet Chocolate Pretzels</h6><p>Rods: ${cartState.pretzels.rodQty} | Loops: ${cartState.pretzels.loopQty}</p></div>`;
+                isEmpty = false;
+            }
+            if (cartState.riceKrispies.quantity > 0) {
+                htmlStream += `<div class="cart-item-receipt-row"><h6>🧱 Rice Krispies Treats</h6><p>Total Count: ${cartState.riceKrispies.quantity} pcs</p></div>`;
+                isEmpty = false;
+            }
+            if (cartState.strawberries.quantity > 0) {
+                htmlStream += `<div class="cart-item-receipt-row"><h6>🍓 Hand-Dipped Strawberries</h6><p>Total Count: ${cartState.strawberries.quantity} pcs</p></div>`;
+                isEmpty = false;
+            }
+
+            if (isEmpty) {
+                htmlStream = `<div style="text-align:center; padding:20px; color:#666;"><strong>Your cart is currently empty!</strong></div>`;
+            }
+
+            bodyNode.innerHTML = htmlStream;
+            modalNode.classList.add('modal-active');
+        }
+
+        function closeBeautifulCartSummary() {
+            const modalNode = document.getElementById('dreamCartModal');
+            if (modalNode) modalNode.classList.remove('modal-active');
+        }
+
+        // --- BACKGROUND AMBIENT PARTICLES ---
+        const bakeryTreats = ['🧁', '🍪', '🍩', '🍫', '✨'];
+        setInterval(() => {
+            if (!header || header.classList.contains('header-hidden') || !particleContainer) return;
+            const particle = document.createElement('span');
+            particle.className = 'bakery-particle';
+            particle.innerText = bakeryTreats[Math.floor(Math.random() * bakeryTreats.length)];
+            particle.style.left = (Math.random() * 100) + '%';
+            particle.style.fontSize = (Math.floor(Math.random() * 10) + 12) + 'px';
+            particle.style.animationDuration = '5s';
+            particleContainer.appendChild(particle);
+            setTimeout(() => { particle.remove(); }, 5000);
+        }, 400);
+
+        // Synchronize shopping basket values on load
+        let itemsSum = cartState.cakePops.quantity + cartState.oreos.quantity + cartState.pretzels.rodQty + cartState.pretzels.loopQty + cartState.riceKrispies.quantity + cartState.strawberries.quantity;
+        const displayLabel = document.getElementById('headerCartCountDisplay');
+        if (displayLabel) displayLabel.innerText = '🛒 Cart: ' + itemsSum + ' items';
+    </script>
+
+    <!-- Policy Popup: opens Privacy / Terms / Cookies in a transparent window on the same page, no new page -->
+    <div id="policyModal" class="dream-contact-modal-overlay" onclick="if(event.target===this) closePolicyPopup();">
+        <div class="dream-cart-window-card">
+            <div class="dream-modal-header">
+                <h4 id="policyModalTitle">Policy</h4>
+                <button type="button" class="dream-modal-close-trigger" onclick="closePolicyPopup()">&times;</button>
+            </div>
+            <iframe id="policyIframe" src="" title="Policy page" style="width:100%; height:70vh; border:none; border-radius:8px; background:#fff;"></iframe>
+        </div>
+    </div>
+    <style>
+        #policyModal { overflow-y: auto; -webkit-overflow-scrolling: touch; align-items: flex-start; padding: 20px 10px; }
+        #policyModal .dream-cart-window-card { margin: auto; max-height: calc(100vh - 40px); width: 95%; max-width: 820px; overflow-y: auto; }
+    </style>
+    <script>
+        function openPolicyPopup(page, title) {
+            document.getElementById('policyModalTitle').innerText = title;
+            document.getElementById('policyIframe').src = page;
+            document.getElementById('policyModal').classList.add('contact-modal-active');
+        }
+        function closePolicyPopup() {
+            document.getElementById('policyModal').classList.remove('contact-modal-active');
+        }
+    </script>
+
+</body>
+</html>
+

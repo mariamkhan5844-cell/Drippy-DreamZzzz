@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1757822952389461"
+     crossorigin="anonymous">
+  var SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzORVej0bLY_dditOHYOOjmjxVj129pCnMv3Z2X-m2Bhns3oQbNVFZg1Inw0RgxkF9Tew/exec';
+  function altOrderNumber() {
+    var d = new Date();
+    var ymd = d.getFullYear().toString() + ('0' + (d.getMonth() + 1)).slice(-2) + ('0' + d.getDate()).slice(-2);
+    return 'DD-' + ymd + '-' + Math.floor(1000 + Math.random() * 9000);
+  }
+  async function sendOrderAlt(event) {
+    event.preventDefault();
+    var t = document.getElementById('treatSelect').value.replace(/^[\u{1F300}-\u{1FAFF}]\s*/u, '');
+    var name = document.getElementById('custName').value.trim();
+    var email = document.getElementById('custEmail').value.trim();
+    var theme = document.getElementById('orderTheme').value.trim();
+    var qty = altOrderQty();
+    var out = document.getElementById('orderResult');
+    out.style.display = 'block';
+    if (name.length < 2) { out.textContent = 'Please enter your name.'; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { out.textContent = 'Please enter a valid email.'; return; }
+    if (theme.length < 3) { out.textContent = 'Please tell us your theme & colours (at least 3 characters).'; return; }
+    if (qty < 12) { out.textContent = 'Sorry, minimum 12 required' + (t === 'Chocolate Pretzels' ? ' in total (rods + loops).' : '.'); return; }
+    var dateVal = document.getElementById('neededDate').value;
+    if (!dateVal) { out.textContent = 'Please pick your needed date.'; return; }
+    var isDelivery = document.getElementById('deliveryMethod').value === 'delivery';
+    var addr = document.getElementById('deliveryAddress').value.trim();
+    if (isDelivery && addr.length < 3) { out.textContent = 'Please enter your delivery address.'; return; }
+    if (isDelivery && lastDistanceMiles === null) { out.textContent = 'Please tap "Check how far you are" first, so we can confirm your delivery charge.'; return; }
+    if (!confirm('Prices may vary — if your design is a little difficult, we will tell you the final price by email. Once you confirm, then we will start preparing your order. A 60% deposit is required to confirm your order, with the rest paid in full one day before your order day. Continue?')) return;
+    var r = altOrderTotal();
+    var num = altOrderNumber();
+    var phone = document.getElementById('custPhone').value.trim();
+    var allergy = document.getElementById('custAllergy').value.trim();
+    var detail = 'Theme: ' + theme;
+    if (t === 'Cake Popsicles') detail = document.getElementById('cakeFlavour').value + ' • ' + detail;
+    if (t === 'Chocolate Pretzels') detail = 'Rods ' + (parseInt(document.getElementById('rodQty').value) || 0) + ' + Loops ' + (parseInt(document.getElementById('loopQty').value) || 0) + ' • ' + detail + (document.getElementById('orderDec').checked ? ' • Artisanal Decoration' : '');
+    if (document.getElementById('orderUp1').checked) detail += ' • Extra Dressing';
+    if (document.getElementById('orderUp2').checked) detail += ' • Stick Wrap';
+    var itemLine = t + ' x ' + qty + ' — ' + detail + ' — $' + r.total.toFixed(2);
+    var lines = ['Order Number: ' + num, 'Name: ' + name, 'Email: ' + email, 'Phone: ' + (phone || 'Not given'), 'Allergies / Notes: ' + (allergy || 'None given'), 'Needed on: ' + dateVal, 'Address: ' + (isDelivery ? addr + (lastDistanceMiles !== null ? ' (' + lastDistanceMiles.toFixed(1) + ' miles from Hanover Park, IL)' : '') + (lastLat ? ' | Google Maps: https://www.google.com/maps/search/?api=1&query=' + lastLat + ',' + lastLon : '') : 'Pickup'), 'Delivery: ' + (isDelivery ? 'Delivery ($' + r.fee.toFixed(2) + ')' : 'Pickup ($0.00)'), '', itemLine, '', 'Total: $' + (r.total + r.fee).toFixed(2)];
+    try {
+      fetch(SHEETS_WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ date: new Date().toISOString(), order_number: num, name: name, email: email, phone: phone || '', items: itemLine, total: (r.total + r.fee).toFixed(2), delivery: (isDelivery ? 'Delivery ($' + r.fee.toFixed(2) + ')' : 'Pickup'), address: isDelivery ? addr : 'Pickup', distance: lastDistanceMiles !== null ? lastDistanceMiles.toFixed(1) : '', allergies: allergy || '', needed: dateVal }) }).catch(function() {});
+    } catch (e) {}
+    out.textContent = 'Sending your order…';
+    try {
+      var res = await fetch('https://formsubmit.co/ajax/drippydreamz26@gmail.com', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify({ name: name, email: email, order: lines.join('\n'), order_number: num, _subject: 'New Order ' + num + ' - Drippy DreamZzzz', _captcha: 'false', _template: 'table' }) });
+      if (!res.ok) throw new Error('send failed');
+      out.textContent = '✅ Order Placed! Your order number is ' + num + '. We will confirm by email.';
+      ['custName', 'custEmail', 'custPhone', 'orderTheme', 'custAllergy', 'deliveryAddress'].forEach(function(id) { var el = document.getElementById(id); if (el) el.value = ''; });
+      document.getElementById('orderQty').value = 12;
+      document.getElementById('rodQty').value = 0; document.getElementById('loopQty').value = 0;
+      document.getElementById('deliveryMethod').value = 'pickup';
+      lastDistanceMiles = null; lastLat = null; lastLon = null;
+      updateAddressRequired(); updateForm();
+    } catch (e) {
+      out.textContent = 'Sorry, your order could not be sent. Please try again.';
+    }
+  }
+  document.querySelectorAll('#altOrderForm input, #altOrderForm select, #altOrderForm textarea').forEach(function(el) { el.addEventListener('input', updateEstimate); el.addEventListener('change', updateEstimate); });
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drippy DreamZzzz</title>
+<link rel="canonical" href="https://drippydreamzzz.com/">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: #fff8fb; color: #3d2a30; }
+  a { color: #c2185b; text-decoration: none; }
+  /* Sticky top bar — completely different from the current menu */
+  .topbar { position: sticky; top: 0; z-index: 10; background: #fff; border-bottom: 2px solid #f9a8d4; display: flex; align-items: center; gap: 12px; padding: 10px 16px; }
+  .topbar { flex-wrap: wrap; }
+  .topbar img.logo { height: 44px; width: auto; max-width: 180px; border-radius: 8px; object-fit: contain; background: #fff; flex-shrink: 0; }
+  .topbar .brand { display: flex; align-items: center; }
+  .topbar nav { flex-wrap: wrap; justify-content: flex-end; align-items: center; }
+  .topbar .brand { font-weight: 900; font-size: 19px; }
+  .topbar nav { margin-left: auto; display: flex; gap: 14px; font-weight: 700; font-size: 14px; }
+  /* Full-width hero banner photo */
+  .hero { position: relative; }
+  .hero img { width: 100%; height: 300px; object-fit: cover; display: block; }
+  .hero .overlay { position: absolute; inset: 0; background: rgba(60, 10, 30, 0.45); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center; padding: 20px; }
+  .hero h1 { margin: 0 0 8px; font-size: 34px; }
+  .hero p { margin: 0 0 16px; font-size: 17px; }
+  .btn { display: inline-block; background: #ec1c7a; color: #fff; font-weight: 800; padding: 13px 26px; border-radius: 999px; border: none; cursor: pointer; font-size: 16px; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 20px 16px 40px; }
+  h2 { text-align: center; margin: 34px 0 16px; }
+  /* Steps as a horizontal row */
+  .steps { display: flex; gap: 10px; text-align: center; }
+  .steps div { flex: 1; background: #fff; border: 2px solid #f9a8d4; border-radius: 16px; padding: 14px 8px; }
+  .steps b { display: block; font-size: 24px; margin-bottom: 4px; }
+  /* Treats as a vertical list, photo left, details right */
+  .treat-card { display: flex; gap: 14px; background: #fff; border: 2px solid #f9a8d4; border-radius: 20px; padding: 14px; margin-bottom: 14px; align-items: center; }
+  .treat-card img { width: 110px; height: 110px; border-radius: 16px; object-fit: cover; flex-shrink: 0; }
+  .treat-card h3 { margin: 0 0 4px; }
+  .treat-card p { margin: 0 0 6px; font-size: 14px; color: #6b5560; }
+  .treat-card .price { font-weight: 900; color: #c2185b; font-size: 17px; }
+  .treat-card .order-btn { margin-left: auto; flex-shrink: 0; background: #fff; border: 2px solid #ec1c7a; color: #c2185b; font-weight: 800; border-radius: 999px; padding: 10px 16px; cursor: pointer; }
+  /* Simple price table */
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; }
+  td, th { padding: 11px 10px; border-bottom: 1px solid #ffe4ec; text-align: left; font-size: 15px; }
+  td:last-child, th:last-child { text-align: right; font-weight: 800; color: #c2185b; }
+  /* One single order form for everything */
+  .order-form { background: #fff; border: 2px solid #f9a8d4; border-radius: 20px; padding: 20px; }
+  .order-form label { display: block; font-weight: 700; margin: 12px 0 4px; }
+  .order-form input, .order-form select, .order-form textarea { width: 100%; min-height: 48px; padding: 12px; font-size: 16px; border: 2px solid #f9a8d4; border-radius: 12px; box-sizing: border-box; margin: 0; }
+  .order-form input[type="date"] { appearance: none; -webkit-appearance: none; line-height: 22px; }
+  .note { background: #fff7cc; border-radius: 14px; padding: 14px; font-size: 14px; margin-top: 16px; }
+  footer { text-align: center; padding: 24px 16px 40px; font-size: 14px; color: #6b5560; }
+
+  .policy-modal { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.75); align-items: center; justify-content: center; padding: 20px; }
+  .policy-modal.open { display: flex; }
+  .policy-box { background: #fff; border-radius: 20px; max-width: 680px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 24px 20px; color: #2b1614; line-height: 1.7; }
+  .policy-box h1 { font-size: 22px; color: #1e3a8a; }
+  .policy-box h2 { font-size: 17px; color: #1e3a8a; margin-top: 20px; }
+  .policy-close { float: right; background: #ec1c7a; color: #fff; border: none; border-radius: 999px; padding: 8px 16px; font-weight: 800; cursor: pointer; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <img class="logo" src="https://drippydreamzzz.com/logo.png" alt="Drippy DreamZzzz logo">
+  <span class="brand">Drippy DreamZzzz</span>
+  <nav><a href="#treats">Treats</a><a href="#prices">Prices</a><a href="#about">About</a><a href="#order">Order</a><a href="#" onclick="openPolicy('contactModal'); return false;">Contact</a></nav>
+</header>
+
+<section class="hero">
+  <img src="https://drippydreamzzz.com/cakepops.jpeg" alt="Cake popsicles">
+  <div class="overlay">
+    <h1>Custom treats, made to celebrate.</h1>
+    <p>Chicago &amp; suburbs only • Minimum 12 per flavour</p>
+    <a class="btn" href="#treats">See Treats ↓</a>
+  </div>
+</section>
+
+<div class="wrap">
+  <div style="background:#fff7cc; border:2px solid #f59e0b; border-radius:16px; padding:16px; text-align:center; margin-top:20px;"><b>⚠️ Allergy Warning:</b> These treats are made in a home kitchen and <b>may contain nuts</b>. If you have any allergy, please tell us in the order form below.</div>
+
+  <h2>How it works</h2>
+  <div class="steps">
+    <div><b>1️⃣</b>Pick a treat</div>
+    <div><b>🎨</b>Choose your theme</div>
+    <div><b>📧</b>We confirm by email</div>
+  </div>
+
+  <h2 id="treats">Our Treats</h2>
+  <div class="treat-card">
+    <img src="https://drippydreamzzz.com/cake%20pop.jpeg" alt="Cake Popsicles">
+    <div><h3>Cake Popsicles</h3><p>Soft cake on a stick, coated in chocolate.</p><p style="font-size:13px;">Flavours: Chocolate, Vanilla, Red Velvet, Confetti, Double Choc, Yellow Cake, Strawberry, Lemon Drop, Carrot Crust.</p><div class="price">$24 per dozen</div></div>
+    <button class="order-btn" onclick="pickTreat('Cake Popsicles')">Order →</button>
+  </div>
+  <div class="treat-card">
+    <img src="https://drippydreamzzz.com/oreo.jpeg" alt="Chocolate Covered Oreos">
+    <div><h3>Chocolate Covered Oreos</h3><p>Crunchy Oreos in milk &amp; white chocolate.</p><div class="price">$20 per dozen</div></div>
+    <button class="order-btn" onclick="pickTreat('Chocolate Covered Oreos')">Order →</button>
+  </div>
+  <div class="treat-card">
+    <img src="https://drippydreamzzz.com/pretzels.jpeg" alt="Chocolate Pretzels">
+    <div><h3>Chocolate Pretzels</h3><p>Crunchy rods &amp; loops in chocolate.</p><p style="font-size:13px;">Rods + Loops — split any way you like, total 12 or more.</p><div class="price">$24 per dozen</div></div>
+    <button class="order-btn" onclick="pickTreat('Chocolate Pretzels')">Order →</button>
+  </div>
+  <div class="treat-card">
+    <img src="https://drippydreamzzz.com/rice-krispies.jpeg" alt="Rice Krispies Treats">
+    <div><h3>Rice Krispies Treats</h3><p>Soft, chewy bars dipped in chocolate.</p><div class="price">From $24</div><p style="font-size:13px;">Pack prices are listed clearly in the Price List below.</p></div>
+    <button class="order-btn" onclick="pickTreat('Rice Krispies Treats')">Order →</button>
+  </div>
+  <div class="treat-card">
+    <img src="https://drippydreamzzz.com/strawberries.jpg" alt="Chocolate Strawberries">
+    <div><h3>Chocolate Strawberries</h3><p>Fresh strawberries dipped in chocolate.</p><div class="price">$24 per dozen</div></div>
+    <button class="order-btn" onclick="pickTreat('Chocolate Strawberries')">Order →</button>
+  </div>
+
+  <h2 id="prices">Price List</h2>
+  <table>
+    <tr><th>Treat</th><th>Price</th></tr>
+    <tr><td>Cake Popsicles</td><td>$24 per dozen</td></tr>
+    <tr><td>Chocolate Covered Oreos</td><td>$20 per dozen</td></tr>
+    <tr><td>Chocolate Pretzels</td><td>$24 per dozen</td></tr>
+    <tr><td>Rice Krispies — 12 pieces</td><td>$24</td></tr>
+    <tr><td>Rice Krispies — 24 pieces</td><td>$48</td></tr>
+    <tr><td>Rice Krispies — 36 pieces</td><td>$60</td></tr>
+    <tr><td>Rice Krispies — 48 pieces</td><td>$90</td></tr>
+    <tr><td>Rice Krispies — 96 pieces</td><td>$150</td></tr>
+    <tr><td>Rice Krispies — over 96 pieces</td><td>$200</td></tr>
+    <tr><td>Chocolate Strawberries</td><td>$24 per dozen</td></tr>
+    <tr><td colspan="2" style="font-weight:900; background:#ffe4ec;">✨ Extras (optional)</td></tr>
+    <tr><td>Pretzel Artisanal Decoration</td><td>+$8 per dozen</td></tr>
+    <tr><td>Hand-Dipped Strawberries Extra Dressing</td><td>+$10</td></tr>
+    <tr><td>Individual Treat Stick Wrap</td><td>+$15</td></tr>
+    <tr><td>🏠 Pickup</td><td>Free</td></tr>
+    <tr><td>🚗 Delivery — within 5 miles</td><td>$10</td></tr>
+    <tr><td>🚗 Delivery — above 5 miles</td><td>$20</td></tr>
+  </table>
+
+
+  <h2 id="delivery">Pickup &amp; Delivery</h2>
+  <div style="display:flex; flex-direction:column; gap:12px;">
+    <div style="background:#fff; border:2px solid #f9a8d4; border-radius:16px; padding:16px;"><b>🏠 Pickup — Free</b><br><span style="font-size:14px; color:#6b5560;">You collect your order from us. No delivery charge at all.</span></div>
+    <div style="background:#fff; border:2px solid #f9a8d4; border-radius:16px; padding:16px;"><b>🚗 Delivery within 5 miles — $10</b><br><span style="font-size:14px; color:#6b5560;">We drop your order at your address, if you are within 5 miles.</span></div>
+    <div style="background:#fff; border:2px solid #f9a8d4; border-radius:16px; padding:16px;"><b>🚗 Delivery above 5 miles — $20</b><br><span style="font-size:14px; color:#6b5560;">For addresses further than 5 miles. Chicago &amp; suburbs only — please enter your address when ordering so the right charge applies.</span></div>
+  </div>
+
+  <h2 id="about">About Us</h2>
+  <p style="text-align:center;">Founded by Mariam Khan • Since May 2025<br>Custom baking treats made to order in Chicago and suburbs.</p>
+  <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin:16px 0;">
+    <a href="https://www.instagram.com/drippydreamzzz" target="_blank" rel="noopener" style="display:flex; align-items:center; gap:10px; background:linear-gradient(135deg, #f9a8d4, #ec1c7a); color:#fff; font-weight:800; border-radius:16px; padding:14px 20px; min-width:220px; justify-content:center;">📸 <span style="text-align:left;">Instagram<br><span style="font-weight:400; font-size:14px;">@drippydreamzzz</span></span></a>
+    <a href="https://www.tiktok.com/@drippy.dreamzzz" target="_blank" rel="noopener" style="display:flex; align-items:center; gap:10px; background:#111; color:#fff; font-weight:800; border-radius:16px; padding:14px 20px; min-width:220px; justify-content:center;">🎵 <span style="text-align:left;">TikTok<br><span style="font-weight:400; font-size:14px;">@drippy.dreamzzz</span></span></a>
+  </div>
+
+</div>
+
+  <h2 id="order">Place Your Order</h2>
+  <form class="order-form" id="altOrderForm" onsubmit="sendOrderAlt(event)">
+    <p style="font-size:14px; color:#6b5560;">Tap a treat to choose it:</p>
+  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:6px;">
+    <button type="button" onclick="pickTreat('Cake Popsicles')" style="display:flex; align-items:center; gap:8px; background:#fff; border:2px solid #f9a8d4; border-radius:999px; padding:6px 14px 6px 6px; font-weight:700; cursor:pointer;"><img src="https://drippydreamzzz.com/cake%20pop.jpeg" alt="" style="width:56px; height:56px; border-radius:50%; object-fit:cover;">Cake Popsicles</button>
+    <button type="button" onclick="pickTreat('Chocolate Covered Oreos')" style="display:flex; align-items:center; gap:8px; background:#fff; border:2px solid #f9a8d4; border-radius:999px; padding:6px 14px 6px 6px; font-weight:700; cursor:pointer;"><img src="https://drippydreamzzz.com/oreo.jpeg" alt="" style="width:56px; height:56px; border-radius:50%; object-fit:cover;">🍪 Oreos</button>
+    <button type="button" onclick="pickTreat('Chocolate Pretzels')" style="display:flex; align-items:center; gap:8px; background:#fff; border:2px solid #f9a8d4; border-radius:999px; padding:6px 14px 6px 6px; font-weight:700; cursor:pointer;"><img src="https://drippydreamzzz.com/pretzels.jpeg" alt="" style="width:56px; height:56px; border-radius:50%; object-fit:cover;">🥨 Pretzels</button>
+    <button type="button" onclick="pickTreat('Rice Krispies Treats')" style="display:flex; align-items:center; gap:8px; background:#fff; border:2px solid #f9a8d4; border-radius:999px; padding:6px 14px 6px 6px; font-weight:700; cursor:pointer;"><img src="https://drippydreamzzz.com/rice-krispies.jpeg" alt="" style="width:56px; height:56px; border-radius:50%; object-fit:cover;">Rice Krispies</button>
+    <button type="button" onclick="pickTreat('Chocolate Strawberries')" style="display:flex; align-items:center; gap:8px; background:#fff; border:2px solid #f9a8d4; border-radius:999px; padding:6px 14px 6px 6px; font-weight:700; cursor:pointer;"><img src="https://drippydreamzzz.com/strawberries.jpg" alt="" style="width:56px; height:56px; border-radius:50%; object-fit:cover;">Strawberries</button>
+  </div>
+    <label>Choose a treat — tap a photo below</label>
+    <select id="treatSelect" onchange="updateForm()" style="display:none;">
+      <option>Cake Popsicles</option>
+      <option>🍪 Chocolate Covered Oreos</option>
+      <option>🥨 Chocolate Pretzels</option>
+      <option>Rice Krispies Treats</option>
+      <option>Chocolate Strawberries</option>
+    </select>
+    <div id="flavourBox">
+      <label>Flavour</label>
+      <select id="cakeFlavour">
+        <option>Chocolate</option><option>Vanilla</option><option>Red Velvet</option><option>Confetti</option><option>Double Choc</option><option>Yellow Cake</option><option>Strawberry</option><option>Lemon Drop</option><option>Carrot Crust</option>
+      </select>
+    </div>
+    <div id="pretzelBox">
+      <label>Pretzel Rods</label>
+      <input type="number" id="rodQty" value="0" min="0">
+      <label>Pretzel Loops</label>
+      <input type="number" id="loopQty" value="0" min="0">
+      <p style="font-size:13px; color:#6b5560;">Rods + Loops together must total 12 or more — split them any way you like.</p>
+    </div>
+    <div id="qtyBox">
+      <label>Quantity (minimum 12)</label>
+      <input type="number" id="orderQty" value="12" min="12">
+    </div>
+    <div id="pretzelDecBox" style="display:none;">
+      <label><input type="checkbox" id="orderDec"> Pretzel Artisanal Decoration +$8 per dozen</label>
+    </div>
+    <label><input type="checkbox" id="orderUp1"> Hand-Dipped Strawberries Extra Dressing +$10</label>
+    <label><input type="checkbox" id="orderUp2"> Individual Treat Stick Wrap +$15</label>
+    <p id="orderEstimate" style="font-weight:800; color:#c2185b;">Estimated total: —</p>
+    <label>Theme &amp; Colours (required)</label>
+    <input type="text" id="orderTheme" placeholder="e.g. pink birthday theme" required>
+    <label>Your name *</label>
+    <input type="text" id="custName" placeholder="Full name" required>
+    <label>Email *</label>
+    <input type="email" id="custEmail" placeholder="you@example.com" required>
+    <label>Contact Number (phone)</label>
+    <input type="tel" id="custPhone" placeholder="e.g. 224-555-1234" autocomplete="tel">
+    <label>Needed date *</label>
+    <input type="date" id="neededDate" required>
+    <p style="font-size:13px; color:#6b5560; margin-top:8px;">📅 Please note: customers must place their order at least 4 days in advance.</p>
+    <label>Pickup or Delivery</label>
+    <select id="deliveryMethod" onchange="updateAddressRequired()">
+      <option value="pickup">🏠 Pickup — Free</option>
+      <option value="delivery">🚗 Delivery</option>
+    </select>
+    <div id="addressBox">
+      <label>Delivery Address *</label>
+      <input type="text" id="deliveryAddress" placeholder="Start typing your address…" autocomplete="street-address" oninput="suggestAddress()">
+      <div id="addrSuggestions" style="background:#fff; border:2px solid #f9a8d4; border-top:none; border-radius:0 0 12px 12px; display:none; text-align:left;"></div>
+      <p style="font-size:13px; color:#6b5560; margin:8px 0 0;">🏠 This handmade bakery is based in Hanover Park, so the distance will be calculated from Hanover Park.</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+        <button type="button" onclick="useMyLocation()" style="background:#fff; border:2px solid #ec1c7a; color:#c2185b; font-weight:800; border-radius:999px; padding:10px 18px; cursor:pointer;">📍 Use my current location</button>
+        <a id="googleMapsLink" href="https://www.google.com/maps" target="_blank" rel="noopener" style="background:#fff; border:2px solid #f9a8d4; color:#c2185b; font-weight:800; border-radius:999px; padding:10px 18px;">🗺️ Verify on Google Maps</a>
+      </div>
+      <button type="button" onclick="checkDistance()" style="margin-top:10px; background:#fff; border:2px solid #ec1c7a; color:#c2185b; font-weight:800; border-radius:999px; padding:10px 18px; cursor:pointer;">📍 Check how far you are</button>
+      <p id="distanceResult" style="font-size:14px; color:#6b5560; margin-top:8px;">Enter your address and tap the button — we will show your distance and the delivery charge ($10 within 5 miles, $20 above).</p>
+    </div>
+    <label>Allergies / Special Notes</label>
+    <textarea id="custAllergy" placeholder="e.g. nut allergy — please tell us here" rows="3"></textarea>
+    <p style="font-size:13px; color:#6b5560;">⚠️ Allergy Warning: These treats may contain nuts. Please mention any allergy here so we can take care.</p>
+    <div style="text-align:center; margin-top:18px;"><button class="btn" type="submit">Send Order</button></div>
+    <p id="orderResult" style="font-size:14px; text-align:center; display:none;"></p>
+  </form>
+
+  <div class="note">Good to know: prices may vary if your design is difficult — we confirm the final price by email before starting. A 60% deposit is required to confirm your order, with the rest paid in full one day before your order day. Pickup/delivery only after full payment one day before.</div>
+</div>
+
+  <h2 id="contact">Contact Us</h2>
+  <div style="background:#fff; border:2px solid #f9a8d4; border-radius:20px; padding:22px; text-align:center;">
+    <p style="margin:0 0 14px;">Questions about an order, a theme, or a date? Write to us — we will reply by email.</p>
+    <button type="button" onclick="openPolicy('contactModal')" style="background:#ec1c7a; color:#fff; font-weight:800; border:none; border-radius:999px; padding:13px 26px; font-size:16px; cursor:pointer;">✉️ Send us a message</button>
+    <p style="margin:14px 0 0; font-size:14px; color:#6b5560;">Or write directly to: <a href="mailto:drippydreamz26@gmail.com">drippydreamz26@gmail.com</a></p>
+  </div>
+
+<footer>
+  <div style="margin-bottom:12px; font-weight:700;">
+    <a href="#" onclick="openPolicy('privacyModal'); return false;">Privacy Policy</a> &nbsp;•&nbsp;
+    <a href="#" onclick="openPolicy('termsModal'); return false;">Terms of Service</a> &nbsp;•&nbsp;
+    <a href="#" onclick="openPolicy('cookiesModal'); return false;">Cookies Disclosure</a>
+  </div>
+  Drippy DreamZzzz • Baked with Love • Chicago &amp; Suburbs Only
+</footer>
+
+<script>
+  function updateForm() {
+    var t = document.getElementById('treatSelect').value.replace(/^[\u{1F300}-\u{1FAFF}]\s*/u, '');
+    document.getElementById('flavourBox').style.display = (t === 'Cake Popsicles') ? 'block' : 'none';
+    document.getElementById('pretzelBox').style.display = (t === 'Chocolate Pretzels') ? 'block' : 'none';
+    document.getElementById('pretzelDecBox').style.display = (t === 'Chocolate Pretzels') ? 'block' : 'none';
+    document.getElementById('qtyBox').style.display = (t === 'Chocolate Pretzels') ? 'none' : 'block';
+    updateEstimate();
+  }
+  function altPriceFor(treat, qty) {
+    if (treat === 'Chocolate Covered Oreos') return qty / 12 * 20;
+    if (treat === 'Rice Krispies Treats') {
+      if (qty === 12) return 24; if (qty === 24) return 48; if (qty === 36) return 60; if (qty === 48) return 90; if (qty === 96) return 150; if (qty > 96) return 200;
+      return qty / 12 * 24;
+    }
+    return qty / 12 * 24;
+  }
+  function altOrderQty() {
+    var t = document.getElementById('treatSelect').value.replace(/^[\u{1F300}-\u{1FAFF}]\s*/u, '');
+    if (t === 'Chocolate Pretzels') return (parseInt(document.getElementById('rodQty').value) || 0) + (parseInt(document.getElementById('loopQty').value) || 0);
+    return parseInt(document.getElementById('orderQty').value) || 0;
+  }
+  function altOrderTotal() {
+    var t = document.getElementById('treatSelect').value.replace(/^[\u{1F300}-\u{1FAFF}]\s*/u, '');
+    var qty = altOrderQty();
+    var total = altPriceFor(t, qty);
+    if (t === 'Chocolate Pretzels' && document.getElementById('orderDec').checked) total += qty / 12 * 8;
+    if (document.getElementById('orderUp1').checked) total += 10;
+    if (document.getElementById('orderUp2').checked) total += 15;
+    var fee = 0;
+    if (document.getElementById('deliveryMethod').value === 'delivery' && lastDistanceMiles !== null) fee = lastDistanceMiles <= 5 ? 10 : 20;
+    return { total: total, fee: fee, qty: qty };
+  }
+  function updateEstimate() {
+    var el = document.getElementById('orderEstimate');
+    if (!el) return;
+    var r = altOrderTotal();
+    el.textContent = r.qty >= 12 ? ('Estimated total: $' + (r.total + r.fee).toFixed(2) + (r.fee ? ' (includes $' + r.fee + ' delivery)' : '')) : 'Estimated total: — (minimum 12)';
+  }
+  function pickTreat(name) {
+    var sel = document.getElementById('treatSelect');
+    for (var i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].text.replace(/^[\u{1F300}-\u{1FAFF}]\s*/u, '') === name) { sel.selectedIndex = i; break; }
+    }
+    updateForm();
+    document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+  }
+  updateForm();
+
+  function openPolicy(id) { document.getElementById(id).classList.add('open'); }
+  function closePolicy(id) { document.getElementById(id).classList.remove('open'); }
+
+  function updateAddressRequired() {
+    var isDelivery = document.getElementById('deliveryMethod').value === 'delivery';
+    document.getElementById('addressBox').style.display = isDelivery ? 'block' : 'none';
+    document.getElementById('deliveryAddress').required = isDelivery;
+  }
+  async function checkDistance() {
+    var addr = document.getElementById('deliveryAddress').value.trim();
+    var out = document.getElementById('distanceResult');
+    if (!addr) { out.textContent = 'Please enter your delivery address first.'; return; }
+    out.textContent = 'Checking distance…';
+    try {
+      var res = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(addr));
+      var data = await res.json();
+      if (!data.length) { out.textContent = 'Address not found — please check the spelling and try again.'; return; }
+      var lat2 = parseFloat(data[0].lat), lon2 = parseFloat(data[0].lon);
+      var lat1 = 41.99147, lon1 = -88.15913, R = 3958.8;
+      var dLat = (lat2 - lat1) * Math.PI / 180, dLon = (lon2 - lon1) * Math.PI / 180;
+      var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+      var miles = 2 * R * Math.asin(Math.sqrt(a));
+      var charge = miles <= 5 ? 10 : 20;
+      lastDistanceMiles = miles;
+      out.textContent = 'You are about ' + miles.toFixed(1) + ' miles away — Delivery charge: $' + charge + ' (Pickup is always free).';
+      updateEstimate();
+    } catch (e) {
+      out.textContent = 'Could not check the distance right now — please try again, or enter your address and we will confirm the charge by email.';
+    }
+  }
+  updateAddressRequired();
+
+  var addrTimer = null;
+  var lastDistanceMiles = null;
+  var lastLat = null;
+  var lastLon = null;
+  function suggestAddress() {
+    var q = document.getElementById('deliveryAddress').value.trim();
+    var box = document.getElementById('addrSuggestions');
+    clearTimeout(addrTimer);
+    if (q.length < 3) { box.style.display = 'none'; return; }
+    addrTimer = setTimeout(async function() {
+      try {
+        var res = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=5&addressdetails=1&q=' + encodeURIComponent(q));
+        var data = await res.json();
+        if (!data.length) { box.style.display = 'none'; return; }
+        box.innerHTML = '';
+        data.forEach(function(item) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.textContent = item.display_name;
+          b.style.cssText = 'display:block; width:100%; text-align:left; background:#fff; border:none; border-bottom:1px solid #ffe4ec; padding:11px 12px; font-size:14px; cursor:pointer;';
+          b.onclick = function() {
+            document.getElementById('deliveryAddress').value = item.display_name;
+            lastLat = item.lat; lastLon = item.lon;
+            box.style.display = 'none';
+            updateGoogleMapsLink();
+            checkDistance();
+          };
+          box.appendChild(b);
+        });
+        box.style.display = 'block';
+      } catch (e) { box.style.display = 'none'; }
+    }, 400);
+  }
+  function updateGoogleMapsLink() {
+    var q = document.getElementById('deliveryAddress').value.trim();
+    document.getElementById('googleMapsLink').href = q ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q) : 'https://www.google.com/maps';
+  }
+  function useMyLocation() {
+    var out = document.getElementById('distanceResult');
+    if (!navigator.geolocation) { out.textContent = 'Location is not supported on this device.'; return; }
+    out.textContent = 'Finding your location…';
+    navigator.geolocation.getCurrentPosition(async function(pos) {
+      try {
+        var res = await fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude);
+        var data = await res.json();
+        document.getElementById('deliveryAddress').value = data.display_name || (pos.coords.latitude + ', ' + pos.coords.longitude);
+        updateGoogleMapsLink();
+        checkDistance();
+      } catch (e) { out.textContent = 'Could not read your location address — please type it instead.'; }
+    }, function() { out.textContent = 'Location permission was denied — please type your address instead.'; });
+  }
+  document.getElementById('deliveryAddress').addEventListener('input', updateGoogleMapsLink);
+
+  (function() {
+    var d = new Date();
+    d.setDate(d.getDate() + 4);
+    document.getElementById('neededDate').min = d.toISOString().split('T')[0];
+  })();
+
+  async function sendContactMessage(event) {
+    event.preventDefault();
+    var name = document.getElementById('contactName').value.trim();
+    var email = document.getElementById('contactEmail').value.trim();
+    var phone = document.getElementById('contactPhone').value.trim();
+    var msg = document.getElementById('contactMessage').value.trim();
+    var out = document.getElementById('contactResult');
+    out.style.display = 'block';
+    out.textContent = 'Sending…';
+    try {
+      var res = await fetch('https://formsubmit.co/ajax/drippydreamz26@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ name: name, email: email, phone: phone || 'Not given', message: msg, _subject: 'New Contact Message from Drippy DreamZzzz website' })
+      });
+      if (!res.ok) throw new Error('send failed');
+      out.textContent = 'Thank you! Your message has been sent to us directly. We will reply by email.';
+      document.getElementById('contactName').value = '';
+      document.getElementById('contactEmail').value = '';
+      document.getElementById('contactPhone').value = '';
+      document.getElementById('contactMessage').value = '';
+    } catch (e) {
+      out.textContent = 'Could not send right now — please try again, or write directly to drippydreamz26@gmail.com.';
+    }
+  }
+</script>
+
+<div class="policy-modal" id="privacyModal" onclick="if(event.target===this) closePolicy('privacyModal')">
+  <div class="policy-box"><button class="policy-close" onclick="closePolicy('privacyModal')">✕ Close</button>
+  <h1>Privacy Policy</h1>
+  <p><strong>Last Updated: October 25, 2026</strong></p>
+        <p>At Drippy DreamZzzz, accessible from our primary custom web domain, the privacy of our visitors is one of our core parameters. This Privacy Policy blueprint details exactly what information is collected, cataloged, and recorded by our data matrix layers, and how we apply it to protect your ordering transactions.</p>
+
+        <h2>1. Log File Metrics</h2>
+        <p>Drippy DreamZzzz follows a rigid standard protocol of utilizing server log files. These files index visitors automatically when they navigate open web portals. The data gathered includes internet protocol (IP) addresses, individual browser software profiles, Internet Service Providers (ISPs), date/time stamps, landing/exit vectors, and aggregate click statistics. These metrics are entirely anonymous and are never tied to personally identifiable profiles.</p>
+
+        <h2>2. Cookies and Web Beacons</h2>
+        <p>Like any other business platform, Drippy DreamZzzz uses basic cookies to cache specific user preference settings, tracking what page selections visitors access. We utilize this information to optimize your operational usability speeds by customizing storefront content layouts on the fly.</p>
+
+        <h2>3. Google DoubleClick DART Cookies</h2>
+        <p>Google is one of our primary third-party vendor networks. It utilizes DART cookies to serve contextual ad scripts to our platform visitors based on their web travel histories across different domains. You can easily choose to opt-out of DART tracking scripts by visiting the formal Google Ad and Content Network Privacy Policy directory channels.</p>
+
+        <h2>4. Programmatic Publisher Partners</h2>
+        <p>Some advertising publishers on our treat network may inject compliance cookies or tracking web beacons. Our primary targeted publisher profile is Google AdSense. Every automated advertising network operates an independent privacy infrastructure page detailing user opt-out rules.</p>
+
+        <h2>5. Custom Order Form Data Collection</h2>
+        <p>When you fill out an invoice request using our Custom Order Booking Office, we collect specific details including your name, email address, custom event themes, decoration styling choices, and separate treat quantities. This structural data is strictly utilized to process your bakery orders, verify transaction deposit boundaries, and establish direct communication regarding your custom treats. We do not distribute, lease, sell, or rent this order data to third-party organizations.</p>
+
+        <h2>6. User Consent</h2>
+        <p>By interacting with our artisanal dessert selection channels and using our storefront, you hereby extend formal user consent to our data privacy statement policies and explicitly agree to its legal terms and conditions.</p>
+  <p style="font-size:13px; margin-top:16px;">Full page: <a href="https://drippydreamzzz.com/privacy/" target="_blank" rel="noopener">drippydreamzzz.com/privacy/</a></p>
+  </div>
+</div>
+<div class="policy-modal" id="termsModal" onclick="if(event.target===this) closePolicy('termsModal')">
+  <div class="policy-box"><button class="policy-close" onclick="closePolicy('termsModal')">✕ Close</button>
+  <h1>Terms of Service</h1>
+<p><strong>Last Updated: October 26, 2026</strong></p>
+<p>Welcome to Drippy DreamZzzz. These Terms of Service govern your commercial interaction, invoice transmission parameters, and basket registration booking protocols using our custom multi-category treat station portals.</p>
+
+<h2>1. Batch Production Limits &amp; Order Minimums</h2>
+<p>To preserve manufacturing consistency and raw material calibrations across our commercial baking kitchens, every selected category profile operates under strict minimum order locks. Traditional Cakesicles, Cake Pops, Oreos, Rice Krispies, and Hand-Dipped Strawberries require a strict production floor of 12 items per chosen configuration stream. Gourmet Chocolate Pretzels are permitted to combine rods and loops into customized mixed packages, provided the total combined aggregate sum resolves to a minimum count of 12 pieces or greater. Keystroke and selection inputs below these boundaries cannot be transferred onto production queues.</p>
+
+<h2>2. Design Theme Validation Guardrails</h2>
+<p>When selecting our specialized Cakesicles / Cake Pops bundle tier, customers are legally required to declare structural themes and styling colors via our designated input box widget. Order packages generated without transparent design rules or text values dropping below our baseline buffer threshold are automatically blocked by our cart transmission validators until styling profiles are accurately reported.</p>
+
+<h2>3. Pro-Rated Pricing &amp; Statement Estimates</h2>
+<p>Financial evaluations displayed through our live pricing widget tools are pro-rated approximations calculated across our multi-dozen volume matrixes. Hand-Dipped Strawberries calculate pro-rated at a fixed value of $24.00 per dozen. Custom decorated pretzel treatments apply an immediate material fee of $8.00 per dozen. Global packaging selections—including individual wrap heat-sealing treatment assets (+$15.00)—are loaded straight onto total summary statement balances on checkout execution events.</p>
+
+<h2>4. Booking Confirmations &amp; Deposit Schedules</h2>
+<p>Transmitting a completed checkout invoice from our store portal registers your production interest framework inside our kitchen logs. It does not secure a guaranteed calendar date block. All custom custom bookings are considered pending until our administrative office completes a physical verification loop via email and processes your mandatory 50% non-refundable scheduling deposit.</p>
+
+<h2>5. Content Copyright &amp; Ad Unit Integrity</h2>
+<p>All editorial decoration articles, crumb science documentation matrix columns, and brand asset vectors are the exclusive intellectual property of Drippy DreamZzzz. Users agree not to scrape, hotlink, clone, or disrupt native ad unit blocks running through programmatic publisher platform integration layers.</p>
+  <p style="font-size:13px; margin-top:16px;">Full page: <a href="https://drippydreamzzz.com/terms/" target="_blank" rel="noopener">drippydreamzzz.com/terms/</a></p>
+  </div>
+</div>
+<div class="policy-modal" id="cookiesModal" onclick="if(event.target===this) closePolicy('cookiesModal')">
+  <div class="policy-box"><button class="policy-close" onclick="closePolicy('cookiesModal')">✕ Close</button>
+  <h1>Cookie Disclosure Notice</h1>
+  <p><strong>Last Updated: October 26, 2026</strong></p>
+        <p>Drippy DreamZzzz utilizes data collection cookies and local browser storage arrays to enhance storefront performance speeds, remember your treat configurations, and pass verification compliance guidelines for advertising deployment.</p>
+
+        <h2>1. What Are Cookies?</h2>
+        <p>Cookies are minute alphanumeric text structures downloaded straight to your network devices when you browse standard online portals. They act as automated system memory trackers, enabling platforms to maintain secure user state balances, recall user preferences, and support third-party application plug-ins smoothly.</p>
+
+        <h2>2. How We Apply Cookies & Local Cache</h2>
+        <p>Our ordering platform deploys session tracking arrays and persistent data blocks across two distinct operations:</p>
+        <ul>
+            <li><strong>Fulfillment Performance:</strong> We map your separate selection quantities and custom theme data onto local string scripts so your shopping cart totals don't refresh or erase as you cross directory paths.</li>
+            <li><strong>Programmatic Customizations:</strong> Third-party network publishers utilize cookie keys to analyze traffic trends and display relevant contextual advertisements matching your personal interests.</li>
+        </ul>
+
+        <h2>3. Third-Party Advertising Pixels & Google AdSense</h2>
+        <p>Our website utilizes Google AdSense to serve programmatic marketing ad elements [18:44]. Google implements specialized DART cookie mechanisms to track relative device travel paths, displaying optimized advertisements. You are completely free to review, opt-out, or block Google's custom pixel parameters at any point by visiting the official Google Ad and Content Network Privacy Policy rules page.</p>
+
+        <h2>4. Restricting or Opting-Out of Data Collection</h2>
+        <p>If you prefer to prevent data compilation events, you can adjust your personal device constraints to drop cookies automatically or show warning prompts whenever a site initiates a tracking event. Please note that blocking storage cookies completely will deactivate our multi-category storefront shopping cart features from retaining your active treat selections during your session.</p>
+  <p style="font-size:13px; margin-top:16px;">Full page: <a href="https://drippydreamzzz.com/cookies/" target="_blank" rel="noopener">drippydreamzzz.com/cookies/</a></p>
+  </div>
+</div>
+
+
+<div class="policy-modal" id="contactModal" onclick="if(event.target===this) closePolicy('contactModal')">
+  <div class="policy-box">
+    <button class="policy-close" onclick="closePolicy('contactModal')">✕ Close</button>
+    <h1>Contact Us</h1>
+    <p style="font-size:14px; color:#6b5560;">If you want to ask something, or if you have any issue, you can ask us here. Fill in the form below and press Send — your message will come straight to us.</p>
+    <form onsubmit="sendContactMessage(event)">
+      <label style="display:block; font-weight:700; margin:12px 0 4px;">Your name *</label>
+      <input type="text" id="contactName" required style="width:100%; min-height:48px; padding:12px; font-size:16px; border:2px solid #f9a8d4; border-radius:12px; box-sizing:border-box;">
+      <label style="display:block; font-weight:700; margin:12px 0 4px;">Email address *</label>
+      <input type="email" id="contactEmail" required style="width:100%; min-height:48px; padding:12px; font-size:16px; border:2px solid #f9a8d4; border-radius:12px; box-sizing:border-box;">
+      <label style="display:block; font-weight:700; margin:12px 0 4px;">Phone number</label>
+      <input type="tel" id="contactPhone" style="width:100%; min-height:48px; padding:12px; font-size:16px; border:2px solid #f9a8d4; border-radius:12px; box-sizing:border-box;">
+      <label style="display:block; font-weight:700; margin:12px 0 4px;">Your message *</label>
+      <textarea id="contactMessage" required rows="4" placeholder="Ask us anything, or describe your issue here…" style="width:100%; padding:12px; font-size:16px; border:2px solid #f9a8d4; border-radius:12px; box-sizing:border-box;"></textarea>
+      <p id="contactResult" style="font-size:14px; color:#6b5560; text-align:center; display:none;"></p>
+      <div style="text-align:center; margin-top:18px;"><button type="submit" style="background:#ec1c7a; color:#fff; font-weight:800; border:none; border-radius:999px; padding:13px 26px; font-size:16px; cursor:pointer;">Send Message →</button></div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
